@@ -1,49 +1,25 @@
 "use client"
 
-import type { ReactNode } from "react"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { WagmiProvider } from "wagmi"
-import { OnchainKitProvider } from "@coinbase/onchainkit"
+import { createConfig, http, WagmiProvider } from "wagmi"
 import { base } from "wagmi/chains"
-import { http, createConfig } from "wagmi"
-import { frameConnector } from "@farcaster/frame-wagmi-connector"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { farcasterFrame } from "@farcaster/frame-wagmi-connector"
+import type { ReactNode } from "react"
 
-const config = createConfig({
+export const config = createConfig({
   chains: [base],
-  connectors: [
-    frameConnector({
-      // Farcaster Frame connector for mini app
-      debug: process.env.NODE_ENV === "development",
-    }),
-  ],
   transports: {
     [base.id]: http(),
   },
+  connectors: [farcasterFrame()],
 })
 
 const queryClient = new QueryClient()
 
-interface Web3ProviderProps {
-  children: ReactNode
-}
-
-export function Web3Provider({ children }: Web3ProviderProps) {
+export function Web3Provider({ children }: { children: ReactNode }) {
   return (
     <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <OnchainKitProvider
-          apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
-          chain={base}
-          config={{
-            appearance: {
-              mode: "auto",
-              theme: "base",
-            },
-          }}
-        >
-          {children}
-        </OnchainKitProvider>
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   )
 }

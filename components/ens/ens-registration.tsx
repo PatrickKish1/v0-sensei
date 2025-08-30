@@ -6,22 +6,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Loader2, Check, X, Sparkles } from "lucide-react"
-import { ensService, type ENSRegistration as ENSRegistrationType } from "@/lib/ens"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Separator } from "@/components/ui/separator"
+import { CheckCircle, AlertCircle, Loader2, Zap } from "lucide-react"
+import { isValidENSName } from "@/lib/ens-service"
+import { ensService } from "@/lib/ens"
 
 interface ENSRegistrationProps {
-  replicaId: string
-  userName: string
-  expertise: string[]
-  onRegistrationComplete: (registration: ENSRegistrationType) => void
+  aiPersonaId: string
+  personaName: string
+  onRegistrationComplete: (ensName: string) => void
 }
 
-export function ENSRegistrationComponent({
-  replicaId,
-  userName,
-  expertise,
-  onRegistrationComplete,
-}: ENSRegistrationProps) {
+export function ENSRegistration({ aiPersonaId, personaName, onRegistrationComplete }: ENSRegistrationProps) {
   const [ensName, setEnsName] = useState("")
   const [isChecking, setIsChecking] = useState(false)
   const [isRegistering, setIsRegistering] = useState(false)
@@ -30,10 +27,10 @@ export function ENSRegistrationComponent({
   const [validationError, setValidationError] = useState<string>("")
 
   useEffect(() => {
-    // Generate initial suggestions based on user name and expertise
+    // Generate initial suggestions based on persona name
     const generateSuggestions = async () => {
-      const baseName = userName.toLowerCase().replace(/\s+/g, "")
-      const suggested = await ensService.suggestNames(baseName, expertise)
+      const baseName = personaName.toLowerCase().replace(/\s+/g, "")
+      const suggested = await ensService.suggestNames(baseName)
       setSuggestions(suggested)
 
       // Set first suggestion as default
@@ -43,7 +40,7 @@ export function ENSRegistrationComponent({
     }
 
     generateSuggestions()
-  }, [userName, expertise])
+  }, [personaName])
 
   useEffect(() => {
     const checkAvailability = async () => {
@@ -52,7 +49,7 @@ export function ENSRegistrationComponent({
         return
       }
 
-      const validation = ensService.validateENSName(ensName)
+      const validation = isValidENSName(ensName)
       if (!validation.valid) {
         setValidationError(validation.error || "")
         setAvailability(null)
@@ -85,8 +82,8 @@ export function ENSRegistrationComponent({
       // Mock user address - in production, get from wallet
       const userAddress = "0x" + Math.random().toString(16).substr(2, 40)
 
-      const registration = await ensService.registerENS(ensName, userAddress, replicaId)
-      onRegistrationComplete(registration)
+      const registration = await ensService.registerENS(ensName, userAddress, aiPersonaId)
+      onRegistrationComplete(registration.ensName)
     } catch (error) {
       console.error("Error registering ENS:", error)
     } finally {
@@ -96,9 +93,9 @@ export function ENSRegistrationComponent({
 
   const getStatusIcon = () => {
     if (isChecking) return <Loader2 className="h-4 w-4 animate-spin" />
-    if (validationError) return <X className="h-4 w-4 text-red-500" />
-    if (availability === true) return <Check className="h-4 w-4 text-green-500" />
-    if (availability === false) return <X className="h-4 w-4 text-red-500" />
+    if (validationError) return <AlertCircle className="h-4 w-4 text-red-500" />
+    if (availability === true) return <CheckCircle className="h-4 w-4 text-green-500" />
+    if (availability === false) return <AlertCircle className="h-4 w-4 text-red-500" />
     return null
   }
 
@@ -114,11 +111,11 @@ export function ENSRegistrationComponent({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-amber-500" />
+          <Zap className="h-5 w-5 text-amber-500" />
           Claim Your ENS Name
         </CardTitle>
         <CardDescription>
-          Your AI replica will be accessible through a unique ENS name on the blockchain
+          Your AI persona will be accessible through a unique ENS name on the blockchain
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -136,17 +133,17 @@ export function ENSRegistrationComponent({
             {getStatusIcon()}
           </div>
           {getStatusText() && (
-            <p
-              className={`text-sm ${
+            <Alert
+              variant={
                 validationError || availability === false
-                  ? "text-red-500"
+                  ? "destructive"
                   : availability === true
-                    ? "text-green-500"
-                    : "text-muted-foreground"
-              }`}
+                    ? "success"
+                    : "default"
+              }
             >
-              {getStatusText()}
-            </p>
+              <AlertDescription>{getStatusText()}</AlertDescription>
+            </Alert>
           )}
         </div>
 
@@ -168,10 +165,12 @@ export function ENSRegistrationComponent({
           </div>
         )}
 
+        <Separator />
+
         <div className="bg-muted/50 p-4 rounded-lg space-y-2">
           <h4 className="font-medium">What you get:</h4>
           <ul className="text-sm text-muted-foreground space-y-1">
-            <li>• Unique blockchain identity for your AI replica</li>
+            <li>• Unique blockchain identity for your AI persona</li>
             <li>• Verifiable ownership and authenticity</li>
             <li>• Easy sharing with memorable name</li>
             <li>• Integration with Web3 ecosystem</li>
@@ -196,3 +195,5 @@ export function ENSRegistrationComponent({
     </Card>
   )
 }
+
+export default ENSRegistration
