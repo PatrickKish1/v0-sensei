@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { useAuth } from "@/lib/auth"
-import { Menu, X, Brain, User, Wallet, LogOut } from "lucide-react"
+import { useAuth } from "@/components/auth-provider"
+import { WalletConnect } from "@/components/wallet-connect"
+import { Menu, X, Brain, User, LogOut } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,27 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { user, login, logout } = useAuth()
-
-  const handleWalletConnect = async () => {
-    if (typeof window !== "undefined" && (window as any).ethereum) {
-      try {
-        const accounts = await (window as any).ethereum.request({
-          method: "eth_requestAccounts",
-        })
-        if (accounts.length > 0) {
-          await login(accounts[0])
-        }
-      } catch (error) {
-        console.error("Wallet connection failed:", error)
-        // Fallback for demo
-        await login("0x1234567890123456789012345678901234567890")
-      }
-    } else {
-      // Demo mode - simulate wallet connection
-      await login("0x1234567890123456789012345678901234567890")
-    }
-  }
+  const { user, logout } = useAuth()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -47,9 +28,6 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">
-          <a href="/explore" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-            Explore
-          </a>
           <a
             href="#features"
             className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
@@ -93,7 +71,6 @@ export function Header() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => (window.location.href = "/dashboard")}>Dashboard</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => (window.location.href = "/profile")}>Profile</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => (window.location.href = "/train")}>Train AI</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>
                   <LogOut className="mr-2 h-4 w-4" />
@@ -107,10 +84,7 @@ export function Header() {
                 <User className="h-4 w-4 mr-2" />
                 Sign In
               </Button>
-              <Button size="sm" onClick={handleWalletConnect}>
-                <Wallet className="h-4 w-4 mr-2" />
-                Connect Wallet
-              </Button>
+              <WalletConnect />
             </>
           )}
         </nav>
@@ -143,9 +117,6 @@ export function Header() {
                   <Button variant="outline" size="sm" onClick={() => (window.location.href = "/dashboard")}>
                     Dashboard
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => (window.location.href = "/train")}>
-                    Train AI
-                  </Button>
                   <Button variant="outline" size="sm" onClick={logout}>
                     <LogOut className="h-4 w-4 mr-2" />
                     Log out
@@ -157,10 +128,7 @@ export function Header() {
                     <User className="h-4 w-4 mr-2" />
                     Sign In
                   </Button>
-                  <Button size="sm" onClick={handleWalletConnect}>
-                    <Wallet className="h-4 w-4 mr-2" />
-                    Connect Wallet
-                  </Button>
+                  <WalletConnect />
                 </>
               )}
             </div>
