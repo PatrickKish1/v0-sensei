@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/lib/auth"
+import { useAuth } from "@/components/auth-provider"
 import { useReplica } from "@/lib/replica"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -43,6 +43,8 @@ export default function CreateReplicaPage() {
     responseStyle: "detailed",
     availability: "always",
     pricing: 10,
+    greeting: "Hello! I'm here to help you learn and grow.",
+    purpose: "To share knowledge and expertise in a helpful and engaging way.",
     ensRegistration: null as ENSRegistrationType | null,
     files: [] as File[],
   })
@@ -67,8 +69,8 @@ export default function CreateReplicaPage() {
   const handleCreate = async () => {
     setIsCreating(true)
     try {
-      const replicaId = await createReplica(replicaData)
-      router.push(`/replica/${replicaId}`)
+      const replica = await createReplica(replicaData)
+      router.push(`/replica/${replica.id}`)
     } catch (error) {
       console.error("Failed to create replica:", error)
     } finally {
@@ -88,8 +90,17 @@ export default function CreateReplicaPage() {
     }))
   }
 
-  const handleENSRegistration = (registration: ENSRegistrationType) => {
-    setReplicaData((prev) => ({ ...prev, ensRegistration: registration }))
+  const handleENSRegistration = (ensName: string) => {
+    // Create a mock ENS registration object since we only get the name
+    const mockRegistration: ENSRegistrationType = {
+      name: ensName,
+      address: "0x...", // Will be filled when actually registered
+      owner: "0x...",
+      registrationDate: new Date(),
+      expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+      status: "pending"
+    }
+    setReplicaData((prev) => ({ ...prev, ensRegistration: mockRegistration }))
     setCurrentStep(5) // Move to pricing step
   }
 
@@ -188,9 +199,8 @@ export default function CreateReplicaPage() {
       case 4:
         return (
           <ENSRegistration
-            replicaId={`replica-${Date.now()}`} // Temporary ID
-            userName={replicaData.name}
-            expertise={replicaData.expertise}
+            aiPersonaId={`replica-${Date.now()}`}
+            personaName={replicaData.name}
             onRegistrationComplete={handleENSRegistration}
           />
         )

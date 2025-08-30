@@ -21,8 +21,8 @@ interface ENSCommitment {
 }
 
 export class ENSService {
-  private publicClient
-  private walletClient
+  private publicClient: any
+  private walletClient: any
 
   constructor() {
     const mainnetWithEns = addEnsContracts(mainnet)

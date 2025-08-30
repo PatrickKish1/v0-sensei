@@ -47,6 +47,10 @@ export interface Replica {
   isActive: boolean
   createdAt: string
   lastActive: string
+  status: "active" | "inactive" | "training" | "error"
+  avatar?: string
+  content?: ReplicaContent[]
+  analytics?: ReplicaAnalytics
 }
 
 interface ReplicaContextType {
@@ -98,17 +102,34 @@ export function ReplicaProvider({ children }: { children: ReactNode }) {
       )
 
       // Update replicas list
-      const updatedReplica = {
+      const updatedReplica: Replica = {
         id: replica.uuid,
         name: replicaData.name,
         description: replicaData.description,
+        expertise: replicaData.expertise || [],
+        personality: replicaData.personality || "Helpful and professional",
+        responseStyle: replicaData.responseStyle || "Conversational",
+        availability: replicaData.availability || "24/7",
+        pricing: replicaData.pricing || 0,
         ensName: ensResult.ensName,
         status: "active",
         trainingProgress: 0,
         totalSessions: 0,
+        rating: 0,
         earnings: 0,
+        isActive: true,
         createdAt: new Date().toISOString(),
         lastActive: new Date().toISOString(),
+        content: [],
+        analytics: {
+          totalSessions: 0,
+          totalRevenue: 0,
+          averageRating: 0,
+          totalHours: 0,
+          monthlyGrowth: 0,
+          topTopics: [],
+          recentFeedback: []
+        }
       }
 
       setReplicas((prev) => [...prev, updatedReplica])
@@ -142,11 +163,11 @@ export function ReplicaProvider({ children }: { children: ReactNode }) {
     setReplicas((prev) =>
       prev.map((replica) =>
         replica.id === replicaId
-          ? {
-              ...replica,
-              content: [...replica.content, ...newContent],
-              lastActive: new Date().toISOString(),
-            }
+                  ? {
+            ...replica,
+            content: [...(replica.content || []), ...newContent],
+            lastActive: new Date().toISOString(),
+          }
           : replica,
       ),
     )
@@ -158,7 +179,7 @@ export function ReplicaProvider({ children }: { children: ReactNode }) {
           replica.id === replicaId
             ? {
                 ...replica,
-                content: replica.content.map((content) =>
+                content: (replica.content || []).map((content) =>
                   newContent.find((nc) => nc.id === content.id)
                     ? { ...content, status: "completed" as const }
                     : content,
@@ -177,7 +198,7 @@ export function ReplicaProvider({ children }: { children: ReactNode }) {
         replica.id === replicaId
           ? {
               ...replica,
-              content: replica.content.filter((c) => c.id !== contentId),
+              content: (replica.content || []).filter((c) => c.id !== contentId),
               lastActive: new Date().toISOString(),
             }
           : replica,

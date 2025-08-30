@@ -1,14 +1,27 @@
 "use client"
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ENSRegistration } from "@/components/ens/ens-registration"
 import { ENSProfileManager } from "@/components/ens-profile-manager"
 
 const ENSPage = () => {
-  // Added default export
+  const [currentEnsName, setCurrentEnsName] = useState<string>("")
+  const [aiPersonaId] = useState("default-persona-id")
+  const [personaName] = useState("AI Assistant")
+
+  const handleRegistrationComplete = (ensName: string) => {
+    setCurrentEnsName(ensName)
+    // Switch to manage tab after registration
+    const tabs = document.querySelector('[role="tablist"]') as HTMLElement
+    if (tabs) {
+      const manageTab = tabs.querySelector('[value="manage"]') as HTMLElement
+      if (manageTab) manageTab.click()
+    }
+  }
+
   return (
     <div>
-      {/* Inserted code here */}
       <Card>
         <CardHeader>
           <CardTitle>ENS Management</CardTitle>
@@ -21,10 +34,20 @@ const ENSPage = () => {
               <TabsTrigger value="manage">Manage</TabsTrigger>
             </TabsList>
             <TabsContent value="register">
-              <ENSRegistration />
+              <ENSRegistration 
+                aiPersonaId={aiPersonaId}
+                personaName={personaName}
+                onRegistrationComplete={handleRegistrationComplete}
+              />
             </TabsContent>
             <TabsContent value="manage">
-              <ENSProfileManager />
+              {currentEnsName ? (
+                <ENSProfileManager ensName={currentEnsName} />
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  Register an ENS name first to manage your profile
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </CardContent>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useAuth } from "@/lib/auth"
+import { useAuth } from "@/components/auth-provider"
 import { useReplica } from "@/lib/replica"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -92,7 +92,7 @@ export default function DashboardPage() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Welcome back, {user.displayName || "User"}!</h1>
+                     <h1 className="text-3xl font-bold text-foreground mb-2">Welcome back, {user.name || "User"}!</h1>
           <p className="text-muted-foreground">Manage your AI replica and track your knowledge sharing journey.</p>
         </div>
 
@@ -247,7 +247,7 @@ export default function DashboardPage() {
 
           {/* Training */}
           <TabsContent value="training" className="lg:col-span-2 space-y-6">
-            <AITrainingStatus progress={aiPersonaProgress} />
+            <AITrainingStatus />
           </TabsContent>
 
           {/* Sessions */}

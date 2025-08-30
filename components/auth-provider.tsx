@@ -10,7 +10,10 @@ interface User {
   walletAddress: string
   ensName?: string
   avatar?: string
+  bio?: string
+  expertise?: string[]
   isExpert: boolean
+  joinedAt: Date
 }
 
 interface AuthContextType {
@@ -45,7 +48,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: `User ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`,
         email: "",
         walletAddress,
+        bio: "Passionate about AI and blockchain technology",
+        expertise: ["AI", "Blockchain"],
         isExpert: false,
+        joinedAt: new Date(),
       }
 
       setUser(userData)

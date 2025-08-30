@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { CheckCircle, AlertCircle, Loader2, Zap } from "lucide-react"
-import { isValidENSName } from "@/lib/ens-service"
 import { ensService } from "@/lib/ens"
 
 interface ENSRegistrationProps {
@@ -30,7 +29,7 @@ export function ENSRegistration({ aiPersonaId, personaName, onRegistrationComple
     // Generate initial suggestions based on persona name
     const generateSuggestions = async () => {
       const baseName = personaName.toLowerCase().replace(/\s+/g, "")
-      const suggested = await ensService.suggestNames(baseName)
+      const suggested = await ensService.suggestNames(baseName, [])
       setSuggestions(suggested)
 
       // Set first suggestion as default
@@ -49,7 +48,7 @@ export function ENSRegistration({ aiPersonaId, personaName, onRegistrationComple
         return
       }
 
-      const validation = isValidENSName(ensName)
+      const validation = ensService.validateENSName(ensName)
       if (!validation.valid) {
         setValidationError(validation.error || "")
         setAvailability(null)
@@ -83,7 +82,7 @@ export function ENSRegistration({ aiPersonaId, personaName, onRegistrationComple
       const userAddress = "0x" + Math.random().toString(16).substr(2, 40)
 
       const registration = await ensService.registerENS(ensName, userAddress, aiPersonaId)
-      onRegistrationComplete(registration.ensName)
+      onRegistrationComplete(registration.name)
     } catch (error) {
       console.error("Error registering ENS:", error)
     } finally {
@@ -137,9 +136,7 @@ export function ENSRegistration({ aiPersonaId, personaName, onRegistrationComple
               variant={
                 validationError || availability === false
                   ? "destructive"
-                  : availability === true
-                    ? "success"
-                    : "default"
+                  : "default"
               }
             >
               <AlertDescription>{getStatusText()}</AlertDescription>

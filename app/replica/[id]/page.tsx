@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/lib/auth"
+import { useAuth } from "@/components/auth-provider"
 import { useReplica, type Replica } from "@/lib/replica"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -146,7 +146,7 @@ export default function ReplicaDetailPage({ params }: { params: { id: string } }
                 <CardContent>
                   <div className="text-2xl font-bold mb-2">{replica.trainingProgress}%</div>
                   <Progress value={replica.trainingProgress} className="mb-2" />
-                  <p className="text-xs text-muted-foreground">{replica.content.length} files uploaded</p>
+                  <p className="text-xs text-muted-foreground">{(replica.content?.length || 0)} files uploaded</p>
                 </CardContent>
               </Card>
 
@@ -155,8 +155,8 @@ export default function ReplicaDetailPage({ params }: { params: { id: string } }
                   <CardTitle className="text-sm font-medium text-muted-foreground">Total Sessions</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{replica.analytics.totalSessions}</div>
-                  <p className="text-xs text-muted-foreground">+{replica.analytics.monthlyGrowth}% this month</p>
+                  <div className="text-2xl font-bold">{replica.analytics?.totalSessions || 0}</div>
+                  <p className="text-xs text-muted-foreground">+{replica.analytics?.monthlyGrowth || 0}% this month</p>
                 </CardContent>
               </Card>
 
@@ -165,8 +165,8 @@ export default function ReplicaDetailPage({ params }: { params: { id: string } }
                   <CardTitle className="text-sm font-medium text-muted-foreground">Revenue</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">${replica.analytics.totalRevenue}</div>
-                  <p className="text-xs text-muted-foreground">${replica.pricing.perSession} per session</p>
+                  <div className="text-2xl font-bold">${replica.analytics?.totalRevenue || 0}</div>
+                  <p className="text-xs text-muted-foreground">${replica.pricing} per session</p>
                 </CardContent>
               </Card>
 
@@ -176,10 +176,10 @@ export default function ReplicaDetailPage({ params }: { params: { id: string } }
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-2">
-                    <div className="text-2xl font-bold">{replica.analytics.averageRating || "-"}</div>
+                    <div className="text-2xl font-bold">{replica.analytics?.averageRating || "-"}</div>
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   </div>
-                  <p className="text-xs text-muted-foreground">{replica.analytics.recentFeedback.length} reviews</p>
+                  <p className="text-xs text-muted-foreground">{replica.analytics?.recentFeedback?.length || 0} reviews</p>
                 </CardContent>
               </Card>
             </div>
@@ -266,10 +266,10 @@ export default function ReplicaDetailPage({ params }: { params: { id: string } }
             {/* Content List */}
             <Card>
               <CardHeader>
-                <CardTitle>Training Content ({replica.content.length})</CardTitle>
+                <CardTitle>Training Content ({(replica.content?.length || 0)})</CardTitle>
               </CardHeader>
               <CardContent>
-                {replica.content.length === 0 ? (
+                {(replica.content?.length || 0) === 0 ? (
                   <div className="text-center py-8">
                     <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-sm text-muted-foreground">
@@ -278,7 +278,7 @@ export default function ReplicaDetailPage({ params }: { params: { id: string } }
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {replica.content.map((content) => (
+                    {(replica.content || []).map((content) => (
                       <div key={content.id} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center gap-3">
                           {getContentIcon(content.type)}
@@ -357,18 +357,18 @@ export default function ReplicaDetailPage({ params }: { params: { id: string } }
                       <div className="flex gap-2">
                         <input
                           type="number"
-                          value={replica.pricing.perSession}
+                          value={replica.pricing}
                           className="flex-1 px-3 py-2 border rounded-md"
                           readOnly
                         />
-                        <div className="px-3 py-2 border rounded-md bg-muted text-sm">{replica.pricing.currency}</div>
+                        <div className="px-3 py-2 border rounded-md bg-muted text-sm">USD</div>
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Availability</label>
                       <div className="px-3 py-2 border rounded-md bg-muted text-sm">
-                        {replica.availability.hours[0]} ({replica.availability.timezone})
+                        {replica.availability}
                       </div>
                     </div>
                   </div>

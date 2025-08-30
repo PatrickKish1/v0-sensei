@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/components/auth-provider"
 import { Web3Provider } from "@/providers/web3-provider"
 import { MiniKit } from "@/providers/minikit-provider"
+import { ReplicaProvider } from "@/lib/replica"
 import { Suspense } from "react"
 import "./globals.css"
 
@@ -26,7 +27,9 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <Web3Provider>
             <MiniKit>
-              <AuthProvider>{children}</AuthProvider>
+              <AuthProvider>
+                <ReplicaProvider>{children}</ReplicaProvider>
+              </AuthProvider>
             </MiniKit>
           </Web3Provider>
         </Suspense>

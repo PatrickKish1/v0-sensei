@@ -1,6 +1,6 @@
 "use client"
 
-import { useAuth } from "@/lib/auth"
+import { useAuth } from "@/components/auth-provider"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -18,7 +18,7 @@ export default function ProfilePage() {
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
-    displayName: "",
+    name: "",
     bio: "",
     expertise: [] as string[],
     isExpert: false,
@@ -31,7 +31,7 @@ export default function ProfilePage() {
     }
 
     setFormData({
-      displayName: user.displayName || "",
+      name: user.name || "",
       bio: user.bio || "",
       expertise: user.expertise || [],
       isExpert: user.isExpert || false,
@@ -89,14 +89,14 @@ export default function ProfilePage() {
             <CardHeader>
               <div className="flex items-start gap-6">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.displayName || user.address} />
+                  <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name || user.walletAddress} />
                   <AvatarFallback className="text-2xl">
-                    {user.displayName ? user.displayName[0] : user.address.slice(2, 4)}
+                    {user.name ? user.name[0] : user.walletAddress.slice(2, 4)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
-                    <CardTitle className="text-2xl">{user.displayName || "Anonymous User"}</CardTitle>
+                    <CardTitle className="text-2xl">{user.name || "Anonymous User"}</CardTitle>
                     <Button
                       variant={isEditing ? "default" : "outline"}
                       onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
@@ -107,7 +107,7 @@ export default function ProfilePage() {
                     </Button>
                   </div>
                   <p className="text-muted-foreground font-mono mb-2">
-                    {user.ensName || `${user.address.slice(0, 6)}...${user.address.slice(-4)}`}
+                    {user.ensName || `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}`}
                   </p>
                   <p className="text-muted-foreground mb-4">{user.bio || "No bio provided"}</p>
                   <div className="flex flex-wrap gap-2">
@@ -137,13 +137,13 @@ export default function ProfilePage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="displayName">Display Name</Label>
-                  <Input
-                    id="displayName"
-                    value={formData.displayName}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, displayName: e.target.value }))}
-                    placeholder="Enter your display name"
-                  />
+                                  <Label htmlFor="name">Display Name</Label>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                  placeholder="Enter your display name"
+                />
                 </div>
 
                 <div className="space-y-2">
