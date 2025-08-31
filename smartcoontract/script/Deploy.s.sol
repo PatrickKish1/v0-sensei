@@ -13,9 +13,12 @@ import {SenseiCrossChain} from "../src/SenseiCrossChain.sol";
 
 contract DeployScript is Script {
     function run() external {
+
+
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployer = vm.addr(deployerPrivateKey);
         
+        vm.createSelectFork(vm.rpcUrl("ethereum"));
         vm.startBroadcast(deployerPrivateKey);
         
         console.log("Deploying Sensei Knowledge Economy Platform...");

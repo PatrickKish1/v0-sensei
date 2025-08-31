@@ -13,13 +13,22 @@ interface User {
   bio?: string
   expertise?: string[]
   isExpert: boolean
+  role: "sensei" | "student"
+  category?: string
+  experience?: string
+  socialLinks?: {
+    linkedIn?: string
+    twitter?: string
+    website?: string
+  }
+  registrationData?: any
   joinedAt: Date
 }
 
 interface AuthContextType {
   user: User | null
   isLoading: boolean
-  login: (walletAddress: string) => Promise<void>
+  login: (walletAddress: string, role: "sensei" | "student", registrationData?: any) => Promise<void>
   logout: () => void
   updateProfile: (updates: Partial<User>) => void
 }
@@ -40,17 +49,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false)
   }, [])
 
-  const login = async (walletAddress: string) => {
+  const logout = () => {
+    setUser(null)
+    localStorage.removeItem("sensei_user")
+  }
+
+  // Handle wallet disconnection
+  useEffect(() => {
+    if (!isConnected && user) {
+      // If wallet gets disconnected but user is still logged in, logout the user
+      console.log("Wallet disconnected, logging out user")
+      logout()
+    }
+  }, [isConnected, user])
+
+  const login = async (walletAddress: string, role: "sensei" | "student", registrationData?: any) => {
     setIsLoading(true)
     try {
       const userData: User = {
         id: `user_${walletAddress}`,
-        name: `User ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`,
-        email: "",
+        name: registrationData?.name || `${role === "sensei" ? "Sensei" : "Student"} ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`,
+        email: registrationData?.email || "",
         walletAddress,
-        bio: "Passionate about AI and blockchain technology",
-        expertise: ["AI", "Blockchain"],
-        isExpert: false,
+        bio: registrationData?.bio || `${role === "sensei" ? "Expert" : "Learner"} passionate about knowledge sharing`,
+        expertise: registrationData?.expertise || [],
+        isExpert: role === "sensei",
+        role,
+        category: registrationData?.category,
+        experience: registrationData?.experience,
+        socialLinks: {
+          linkedIn: registrationData?.linkedIn,
+          twitter: registrationData?.twitter,
+          website: registrationData?.website,
+        },
+        registrationData,
         joinedAt: new Date(),
       }
 
@@ -61,11 +93,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const logout = () => {
-    setUser(null)
-    localStorage.removeItem("sensei_user")
   }
 
   const updateProfile = (updates: Partial<User>) => {
