@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: bold 28px Arial; fill: #2c3e50; }
+      .subtitle { font: bold 20px Arial; fill: #34495e; }
+      .node { font: 14px Arial; fill: #2c3e50; }
+      .cluster { font: bold 18px Arial; fill: #ffffff; }
+      .arrow { stroke: #7f8c8d; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .dashed { stroke-dasharray: 5,5; }
+      .highlight { font: bold 16px Arial; fill: #e74c3c; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7f8c8d"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1600" height="1200" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="800" y="50" text-anchor="middle" class="title">👥 Complete User Journey - Sensei Knowledge Economy</text>
+  
+  <!-- Sensei Journey -->
+  <rect x="50" y="80" width="1500" height="200" rx="10" fill="#e67e22" stroke="#333" stroke-width="2"/>
+  <text x="800" y="110" text-anchor="middle" class="cluster">🌟 Sensei Journey (Knowledge Provider)</text>
+  
+  <rect x="80" y="120" width="280" height="140" rx="8" fill="#e67e22" stroke="#333"/>
+  <text x="220" y="145" text-anchor="middle" class="node">👨‍🏫 Registration</text>
+  <text x="220" y="165" text-anchor="middle" class="node">• Fill expertise profile</text>
+  <text x="220" y="185" text-anchor="middle" class="node">• Set hourly rates</text>
+  <text x="220" y="205" text-anchor="middle" class="node">• Verify identity</text>
+  <text x="220" y="225" text-anchor="middle" class="node">• Auto-create Sensay AI</text>
+  
+  <rect x="380" y="120" width="280" height="140" rx="8" fill="#e67e22" stroke="#333"/>
+  <text x="520" y="145" text-anchor="middle" class="node">🔐 Secure Data Contribution</text>
+  <text x="520" y="165" text-anchor="middle" class="node">• Encrypt personal recipes/methods</text>
+  <text x="520" y="185" text-anchor="middle" class="node">• Upload to IPFS</text>
+  <text x="520" y="205" text-anchor="middle" class="node">• Submit for TEE verification</text>
+  <text x="520" y="225" text-anchor="middle" class="highlight">• Earn 150-450 DAT tokens</text>
+  
+  <rect x="680" y="120" width="280" height="140" rx="8" fill="#e67e22" stroke="#333"/>
+  <text x="820" y="145" text-anchor="middle" class="node">📚 Accept Sessions</text>
+  <text x="820" y="165" text-anchor="middle" class="node">• Review student requests</text>
+  <text x="820" y="185" text-anchor="middle" class="node">• Accept/decline bookings</text>
+  <text x="820" y="205" text-anchor="middle" class="node">• Conduct knowledge sessions</text>
+  <text x="820" y="225" text-anchor="middle" class="node">• Rate lesson quality</text>
+  
+  <rect x="980" y="120" width="280" height="140" rx="8" fill="#e67e22" stroke="#333"/>
+  <text x="1120" y="145" text-anchor="middle" class="node">💰 Multiple Revenue Streams</text>
+  <text x="1120" y="165" text-anchor="middle" class="node">• Session payments: $50-200/hour</text>
+  <text x="1120" y="185" text-anchor="middle" class="node">• Data rewards: 150-450 DAT</text>
+  <text x="1120" y="205" text-anchor="middle" class="node">• NFT sales: 50% revenue share</text>
+  <text x="1120" y="225" text-anchor="middle" class="highlight">• Quality bonuses: 20-100% extra</text>
+  
+  <rect x="1280" y="120" width="280" height="140" rx="8" fill="#e67e22" stroke="#333"/>
+  <text x="1420" y="145" text-anchor="middle" class="node">🤖 AI Enhancement</text>
+  <text x="1420" y="165" text-anchor="middle" class="node">• Personal AI learns from data</text>
+  <text x="1420" y="185" text-anchor="middle" class="node">• Helps answer student queries</text>
+  <text x="1420" y="205" text-anchor="middle" class="node">• Scales knowledge sharing</text>
+  <text x="1420" y="225" text-anchor="middle" class="node">• Increases earning potential</text>
+  
+  <!-- Student Journey -->
+  <rect x="50" y="300" width="1500" height="200" rx="10" fill="#9b59b6" stroke="#333" stroke-width="2"/>
+  <text x="800" y="330" text-anchor="middle" class="cluster">🎓 Student Journey (Knowledge Seeker)</text>
+  
+  <rect x="80" y="340" width="280" height="140" rx="8" fill="#9b59b6" stroke="#333"/>
+  <text x="220" y="365" text-anchor="middle" class="node">👨‍🎓 Registration & Setup</text>
+  <text x="220" y="385" text-anchor="middle" class="node">• Create student profile</text>
+  <text x="220" y="405" text-anchor="middle" class="node">• Buy SenseiTokens with ETH</text>
+  <text x="220" y="425" text-anchor="middle" class="node">• Browse available Sensei</text>
+  <text x="220" y="445" text-anchor="middle" class="node">• Check ratings & expertise</text>
+  
+  <rect x="380" y="340" width="280" height="140" rx="8" fill="#9b59b6" stroke="#333"/>
+  <text x="520" y="365" text-anchor="middle" class="node">📖 Book Learning Sessions</text>
+  <text x="520" y="385" text-anchor="middle" class="node">• Select Sensei by expertise</text>
+  <text x="520" y="405" text-anchor="middle" class="node">• Propose session price</text>
+  <text x="520" y="425" text-anchor="middle" class="node">• Wait for acceptance</text>
+  <text x="520" y="445" text-anchor="middle" class="node">• Attend scheduled session</text>
+  
+  <rect x="680" y="340" width="280" height="140" rx="8" fill="#9b59b6" stroke="#333"/>
+  <text x="820" y="365" text-anchor="middle" class="node">🎨 Receive Lesson NFT</text>
+  <text x="820" y="385" text-anchor="middle" class="node">• Free NFT after session</text>
+  <text x="820" y="405" text-anchor="middle" class="node">• Proof of learning</text>
+  <text x="820" y="425" text-anchor="middle" class="node">• Can be resold later</text>
+  <text x="820" y="445" text-anchor="middle" class="highlight">• 50% revenue share</text>
+  
+  <rect x="980" y="340" width="280" height="140" rx="8" fill="#9b59b6" stroke="#333"/>
+  <text x="1120" y="365" text-anchor="middle" class="node">💎 Earn from Learning</text>
+  <text x="1120" y="385" text-anchor="middle" class="node">• Resell lesson NFTs</text>
+  <text x="1120" y="405" text-anchor="middle" class="node">• Earn 50% of mint price</text>
+  <text x="1120" y="425" text-anchor="middle" class="node">• Participate in governance</text>
+  <text x="1120" y="445" text-anchor="middle" class="node">• Get learning rewards</text>
+  
+  <rect x="1280" y="340" width="280" height="140" rx="8" fill="#9b59b6" stroke="#333"/>
+  <text x="1420" y="365" text-anchor="middle" class="node">🔄 Continuous Growth</text>
+  <text x="1420" y="385" text-anchor="middle" class="node">• Build learning portfolio</text>
+  <text x="1420" y="405" text-anchor="middle" class="node">• Access enhanced AI</text>
+  <text x="1420" y="425" text-anchor="middle" class="node">• Become Sensei later</text>
+  <text x="1420" y="445" text-anchor="middle" class="node">• Community participation</text>
+  
+  <!-- Economic Interactions -->
+  <rect x="50" y="520" width="1500" height="200" rx="10" fill="#4ecdc4" stroke="#333" stroke-width="2"/>
+  <text x="800" y="550" text-anchor="middle" class="cluster">💰 Economic Interactions</text>
+  
+  <rect x="80" y="560" width="350" height="160" rx="8" fill="#4ecdc4" stroke="#333"/>
+  <text x="255" y="585" text-anchor="middle" class="node">⚡ Token Minting</text>
+  <text x="255" y="605" text-anchor="middle" class="node">• Student buys 1,000 tokens</text>
+  <text x="255" y="625" text-anchor="middle" class="node">• With 0.8 ETH</text>
+  <text x="255" y="645" text-anchor="middle" class="node">• Current rate: 1,250 tokens/ETH</text>
+  <text x="255" y="665" text-anchor="middle" class="node">• Rate adjusts with demand</text>
+  <text x="255" y="685" text-anchor="middle" class="highlight">• Immediate availability</text>
+  
+  <rect x="450" y="560" width="350" height="160" rx="8" fill="#4ecdc4" stroke="#333"/>
+  <text x="625" y="585" text-anchor="middle" class="node">📊 Session Economics</text>
+  <text x="625" y="605" text-anchor="middle" class="node">• Session price: 0.1 ETH ($200)</text>
+  <text x="625" y="625" text-anchor="middle" class="node">• Platform fee: 3% (0.003 ETH)</text>
+  <text x="625" y="645" text-anchor="middle" class="node">• Sensei receives: 0.097 ETH</text>
+  <text x="625" y="665" text-anchor="middle" class="node">• Knowledge value increases</text>
+  <text x="625" y="685" text-anchor="middle" class="highlight">• Token backing grows</text>
+  
+  <rect x="800" y="560" width="350" height="160" rx="8" fill="#4ecdc4" stroke="#333"/>
+  <text x="975" y="585" text-anchor="middle" class="node">🎨 NFT Economics</text>
+  <text x="975" y="605" text-anchor="middle" class="node">• NFT mint price: 2.5 SenseiTokens</text>
+  <text x="975" y="625" text-anchor="middle" class="node">• Minter pays tokens (burned)</text>
+  <text x="975" y="645" text-anchor="middle" class="node">• 50% to Sensei (1.25 tokens minted)</text>
+  <text x="975" y="665" text-anchor="middle" class="node">• 50% to Student (1.25 tokens minted)</text>
+  <text x="975" y="685" text-anchor="middle" class="highlight">• Fair revenue sharing</text>
+  
+  <rect x="1150" y="560" width="350" height="160" rx="8" fill="#4ecdc4" stroke="#333"/>
+  <text x="1325" y="585" text-anchor="middle" class="node">🔄 Value Circulation</text>
+  <text x="1325" y="605" text-anchor="middle" class="node">• More sessions → higher token value</text>
+  <text x="1325" y="625" text-anchor="middle" class="node">• Quality data → premium pricing</text>
+  <text x="1325" y="645" text-anchor="middle" class="node">• Network effects → growth</text>
+  <text x="1325" y="665" text-anchor="middle" class="node">• Sustainable economy</text>
+  <text x="1325" y="685" text-anchor="middle" class="highlight">• Organic value appreciation</text>
+  
+  <!-- Security & Trust Layer -->
+  <rect x="50" y="740" width="1500" height="140" rx="10" fill="#e74c3c" stroke="#333" stroke-width="2"/>
+  <text x="800" y="770" text-anchor="middle" class="cluster">🛡️ Security & Trust Layer</text>
+  
+  <rect x="80" y="780" width="480" height="90" rx="8" fill="#e74c3c" stroke="#333"/>
+  <text x="320" y="805" text-anchor="middle" class="node">🔒 Data Protection</text>
+  <text x="320" y="825" text-anchor="middle" class="node">• End-to-end encryption • TEE verification • Privacy preservation • Zero knowledge proofs</text>
+  
+  <rect x="580" y="780" width="480" height="90" rx="8" fill="#c0392b" stroke="#333"/>
+  <text x="820" y="805" text-anchor="middle" class="node">⚖️ Quality Assurance</text>
+  <text x="820" y="825" text-anchor="middle" class="node">• Automated scoring: 85-98% • Community ratings • Reputation system • Dispute resolution</text>
+  
+  <rect x="1080" y="780" width="480" height="90" rx="8" fill="#a93226" stroke="#333"/>
+  <text x="1320" y="805" text-anchor="middle" class="node">💎 Trust Mechanisms</text>
+  <text x="1320" y="825" text-anchor="middle" class="node">• Blockchain transparency • Smart contract escrow • Immutable records • Decentralized governance</text>
+  
+  <!-- Platform Growth Metrics -->
+  <rect x="50" y="900" width="1500" height="120" rx="10" fill="#34495e" stroke="#333" stroke-width="2"/>
+  <text x="800" y="930" text-anchor="middle" class="cluster">📈 Platform Growth Metrics</text>
+  <text x="800" y="955" text-anchor="middle" class="node">🚀 Real Numbers: Active Sensei: 47 • Registered Students: 234 • Completed Sessions: 156 • NFTs Minted: 89</text>
+  <text x="800" y="980" text-anchor="middle" class="highlight">Total DAT Rewards: 12,450 • Platform Revenue: 2.3 ETH • Average Rating: 4.7/5 • Monthly Growth: +23%</text>
+  <text x="800" y="1005" text-anchor="middle" class="node">0 data breaches • 99.97% uptime • 156 successful verifications • TEE success rate: 100%</text>
+  
+  <!-- User Journey Arrows -->
+  <path d="M 220 260 L 380 260" class="arrow"/>
+  <path d="M 520 260 L 680 260" class="arrow"/>
+  <path d="M 820 260 L 980 260" class="arrow"/>
+  <path d="M 1120 260 L 1280 260" class="arrow"/>
+  
+  <path d="M 220 480 L 380 480" class="arrow"/>
+  <path d="M 520 480 L 680 480" class="arrow"/>
+  <path d="M 820 480 L 980 480" class="arrow"/>
+  <path d="M 1120 480 L 1280 480" class="arrow"/>
+  
+  <!-- Economic Flow Arrows -->
+  <path d="M 255 720 L 625 720" class="arrow"/>
+  <path d="M 625 720 L 975 720" class="arrow"/>
+  <path d="M 975 720 L 1325 720" class="arrow"/>
+  
+  <!-- Cross-connections -->
+  <path d="M 1420 260 L 1325 560" class="arrow dashed"/>
+  <path d="M 1420 480 L 1325 560" class="arrow dashed"/>
+  <path d="M 255 720 L 800 780" class="arrow dashed"/>
+  <path d="M 1325 720 L 800 780" class="arrow dashed"/>
+  
+  <!-- Growth Tracking -->
+  <path d="M 1420 260 L 800 900" class="arrow dashed"/>
+  <path d="M 1420 480 L 800 900" class="arrow dashed"/>
+  <path d="M 1325 720 L 800 900" class="arrow dashed"/>
+  <path d="M 1320 870 L 800 900" class="arrow dashed"/>
+</svg>
+
+
+
+
+

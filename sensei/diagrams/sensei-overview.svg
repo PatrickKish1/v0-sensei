@@ -1,0 +1,92 @@
+<!-- filepath: /home/odeili/Hacks025/sensei/architecture.svg -->
+<svg width="900" height="520" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+  <!-- User Layer -->
+  <rect x="40" y="40" width="180" height="110" fill="#e3f2fd" stroke="#90caf9" rx="12"/>
+  <text x="130" y="60" font-size="16" font-weight="bold" text-anchor="middle">Users</text>
+  <text x="60" y="85" font-size="13">👨‍🎓 Students</text>
+  <text x="60" y="105" font-size="13">🧓 Senseis</text>
+  <text x="60" y="125" font-size="13">🎨 NFT Minters</text>
+
+  <!-- Gateway Layer -->
+  <rect x="270" y="80" width="180" height="60" fill="#e1f5fe" stroke="#4fc3f7" rx="12"/>
+  <text x="360" y="110" font-size="15" font-weight="bold" text-anchor="middle">SenseiGateway</text>
+  <text x="360" y="128" font-size="12" text-anchor="middle">Central Orchestrator</text>
+
+  <!-- Core Contracts -->
+  <rect x="540" y="30" width="320" height="160" fill="#f3e5f5" stroke="#ba68c8" rx="12"/>
+  <text x="700" y="55" font-size="15" font-weight="bold" text-anchor="middle">Core Contracts</text>
+  <rect x="560" y="70" width="120" height="35" fill="#fff" stroke="#ba68c8" rx="8"/>
+  <text x="620" y="92" font-size="13" text-anchor="middle">SenseiRegistry</text>
+  <rect x="700" y="70" width="140" height="35" fill="#fff" stroke="#ba68c8" rx="8"/>
+  <text x="770" y="92" font-size="13" text-anchor="middle">BookingSystem</text>
+  <rect x="560" y="120" width="120" height="35" fill="#fff" stroke="#ba68c8" rx="8"/>
+  <text x="620" y="142" font-size="13" text-anchor="middle">LessonNFT</text>
+  <rect x="700" y="120" width="140" height="35" fill="#fff" stroke="#ba68c8" rx="8"/>
+  <text x="770" y="142" font-size="13" text-anchor="middle">SenseiToken</text>
+
+  <!-- AI & Privacy Layer -->
+  <rect x="540" y="210" width="320" height="90" fill="#e8f5e8" stroke="#81c784" rx="12"/>
+  <text x="700" y="235" font-size="15" font-weight="bold" text-anchor="middle">AI & Privacy Layer</text>
+  <rect x="560" y="255" width="120" height="30" fill="#fff" stroke="#81c784" rx="8"/>
+  <text x="620" y="275" font-size="13" text-anchor="middle">SensayAI</text>
+  <rect x="700" y="255" width="140" height="30" fill="#fff" stroke="#81c784" rx="8"/>
+  <text x="770" y="275" font-size="13" text-anchor="middle">PrivacyManager</text>
+
+  <!-- Cross-Chain Layer -->
+  <rect x="270" y="200" width="180" height="60" fill="#ffe0b2" stroke="#ffb74d" rx="12"/>
+  <text x="360" y="230" font-size="15" font-weight="bold" text-anchor="middle">SenseiCrossChain</text>
+  <text x="360" y="248" font-size="12" text-anchor="middle">Cross-Chain Bridge</text>
+
+  <!-- External Integrations -->
+  <rect x="40" y="340" width="820" height="120" fill="#fff3e0" stroke="#ffb74d" rx="12"/>
+  <text x="450" y="360" font-size="15" font-weight="bold" text-anchor="middle">External Integrations</text>
+  <rect x="70" y="380" width="120" height="35" fill="#fff" stroke="#ffb74d" rx="8"/>
+  <text x="130" y="402" font-size="13" text-anchor="middle">Zama FHEVM</text>
+  <rect x="220" y="380" width="120" height="35" fill="#fff" stroke="#ffb74d" rx="8"/>
+  <text x="280" y="402" font-size="13" text-anchor="middle">IPFS</text>
+  <rect x="370" y="380" width="120" height="35" fill="#fff" stroke="#ffb74d" rx="8"/>
+  <text x="430" y="402" font-size="13" text-anchor="middle">Ethereum</text>
+  <rect x="520" y="380" width="120" height="35" fill="#fff" stroke="#ffb74d" rx="8"/>
+  <text x="580" y="402" font-size="13" text-anchor="middle">Base</text>
+  <rect x="670" y="380" width="120" height="35" fill="#fff" stroke="#ffb74d" rx="8"/>
+  <text x="730" y="402" font-size="13" text-anchor="middle">Lisk</text>
+
+  <!-- Arrows: User Layer to Gateway -->
+  <line x1="220" y1="95" x2="270" y2="110" stroke="#1976d2" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="220" y1="115" x2="270" y2="110" stroke="#1976d2" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="220" y1="135" x2="270" y2="110" stroke="#1976d2" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Gateway to Core Contracts -->
+  <line x1="450" y1="110" x2="560" y2="87" stroke="#7b1fa2" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="110" x2="700" y2="87" stroke="#7b1fa2" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="110" x2="560" y2="137" stroke="#7b1fa2" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="110" x2="700" y2="137" stroke="#7b1fa2" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Gateway to CrossChain -->
+  <line x1="360" y1="140" x2="360" y2="200" stroke="#ff9800" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Gateway to AI & Privacy -->
+  <line x1="450" y1="110" x2="560" y2="270" stroke="#388e3c" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="110" x2="700" y2="270" stroke="#388e3c" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- AI & Privacy to Zama -->
+  <line x1="620" y1="285" x2="130" y2="380" stroke="#43a047" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="770" y1="285" x2="130" y2="380" stroke="#43a047" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- LessonNFT to IPFS -->
+  <line x1="620" y1="155" x2="280" y2="380" stroke="#ffb300" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- SenseiToken to Ethereum -->
+  <line x1="770" y1="155" x2="430" y2="380" stroke="#1976d2" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- CrossChain to Base/Lisk -->
+  <line x1="450" y1="230" x2="580" y2="380" stroke="#ff9800" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="450" y1="230" x2="730" y2="380" stroke="#ff9800" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>
