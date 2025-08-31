@@ -1,12 +1,31 @@
+# Sensei - AI-Powered Knowledge Sharing Platform
+
+*Bridge generations through AI personas and monetize your expertise*
+=======
 # 🌟 Sensei - Decentralized Knowledge Economy Platform
 
 **Empowering Retirees & Experts Through AI-Powered Knowledge Sharing**
+
 
 Sensei is a revolutionary decentralized platform that creates a thriving economy around knowledge sharing, where retirees and experts can register as "Senseis," create AI clones of themselves, and share their skills with the world forever. Students can book lessons, mint NFTs of their learning experiences, and participate in a knowledge-backed economy.
 
 ## 🎯 Revolutionary Vision
 
+Sensei is a revolutionary Web3 platform that enables knowledge sharing through AI personas and blockchain-based monetization. The platform allows experts (Senseis) to create AI replicas of themselves and monetize their knowledge while students can learn from these AI mentors and earn/spend SensiTokens.
+
+### Key Features
+
+- **Role-Based Authentication**: Users choose between Sensei (expert) or Student roles
+- **Wallet Integration**: Support for MetaMask, WalletConnect, and Coinbase Wallet
+- **Sensei Registration**: Comprehensive onboarding for experts with profile creation
+- **AI Persona Creation**: Transform your expertise into interactive AI replicas
+- **Knowledge Economy**: Earn and spend SensiTokens through learning interactions
+- **Lesson NFTs**: Mint and burn lesson NFTs with 50/50 revenue split
+- **Categorized Marketplace**: Browse senseis by expertise categories
+- **Token Management**: Built-in wallet for minting/burning SensiTokens
+=======
 **Building the World's First Knowledge-Backed Economy**: We believe that knowledge is the most valuable currency. Our platform creates a sustainable economic model where:
+
 
 - **🧓 Retirees & Experts** register as Senseis and create AI replicas that preserve their knowledge forever
 - **👨‍🎓 Students** can book lessons with anyone - no registration required, pay with ETH or SenseiTokens

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: bold 28px Arial; fill: #2c3e50; }
+      .subtitle { font: bold 20px Arial; fill: #34495e; }
+      .node { font: 14px Arial; fill: #2c3e50; }
+      .cluster { font: bold 18px Arial; fill: #ffffff; }
+      .arrow { stroke: #7f8c8d; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .dashed { stroke-dasharray: 5,5; }
+      .highlight { font: bold 16px Arial; fill: #e74c3c; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7f8c8d"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1400" height="1000" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="700" y="50" text-anchor="middle" class="title">💰 Sensei Token Economy - Real-World Implementation</text>
+  
+  <!-- Token Supply & Backing -->
+  <rect x="50" y="80" width="1300" height="120" rx="10" fill="#4ecdc4" stroke="#333" stroke-width="2"/>
+  <text x="700" y="110" text-anchor="middle" class="cluster">💎 Token Supply & Backing</text>
+  
+  <rect x="80" y="120" width="600" height="70" rx="8" fill="#4ecdc4" stroke="#333"/>
+  <text x="380" y="145" text-anchor="middle" class="node">📊 Dynamic Supply</text>
+  <text x="380" y="165" text-anchor="middle" class="node">• Starts at 0 tokens • Minted only through usage</text>
+  <text x="380" y="180" text-anchor="middle" class="highlight">• Current: 15,000 tokens • Backing Ratio: 125%</text>
+  
+  <rect x="720" y="120" width="600" height="70" rx="8" fill="#4ecdc4" stroke="#333"/>
+  <text x="1020" y="145" text-anchor="middle" class="node">🏦 Knowledge Backing</text>
+  <text x="1020" y="165" text-anchor="middle" class="node">• Total Sessions: 47 • Knowledge Value: 18,750 ETH</text>
+  <text x="1020" y="180" text-anchor="middle" class="highlight">• Session Quality Avg: 8.2/10 • Platform Growth: +23%</text>
+  
+  <!-- Minting Mechanisms -->
+  <rect x="50" y="220" width="1300" height="140" rx="10" fill="#2ecc71" stroke="#333" stroke-width="2"/>
+  <text x="700" y="250" text-anchor="middle" class="cluster">⚡ Minting Mechanisms</text>
+  
+  <rect x="80" y="270" width="600" height="80" rx="8" fill="#2ecc71" stroke="#333"/>
+  <text x="380" y="295" text-anchor="middle" class="node">💵 ETH → SenseiToken</text>
+  <text x="380" y="315" text-anchor="middle" class="node">• Current Rate: 1,250 tokens/ETH • Rate adjusts with demand</text>
+  <text x="380" y="330" text-anchor="middle" class="highlight">• Min Rate: 500 tokens/ETH • Max Rate: 2,000 tokens/ETH</text>
+  <text x="380" y="345" text-anchor="middle" class="highlight">• Total Minted: 8,500 tokens</text>
+  
+  <rect x="720" y="270" width="600" height="80" rx="8" fill="#27ae60" stroke="#333"/>
+  <text x="1020" y="295" text-anchor="middle" class="node">🧠 Knowledge → Tokens</text>
+  <text x="1020" y="315" text-anchor="middle" class="node">• Session completion rewards • Quality multiplier: 1.5x-3x</text>
+  <text x="1020" y="330" text-anchor="middle" class="node">• Data contribution rewards • AI interaction bonuses</text>
+  <text x="1020" y="345" text-anchor="middle" class="highlight">• Total Minted: 6,500 tokens</text>
+  
+  <!-- Token Burns & Deflation -->
+  <rect x="50" y="380" width="1300" height="140" rx="10" fill="#e74c3c" stroke="#333" stroke-width="2"/>
+  <text x="700" y="410" text-anchor="middle" class="cluster">🔥 Token Burns & Deflation</text>
+  
+  <rect x="80" y="430" width="600" height="80" rx="8" fill="#e74c3c" stroke="#333"/>
+  <text x="380" y="455" text-anchor="middle" class="node">🎨 NFT Minting Burns</text>
+  <text x="380" y="475" text-anchor="middle" class="node">• Average NFT Price: 2.5 tokens • Total NFTs Minted: 23</text>
+  <text x="380" y="490" text-anchor="middle" class="highlight">• Tokens Burned: 57.5 • Burn Rate: 0.38%</text>
+  
+  <rect x="720" y="430" width="600" height="80" rx="8" fill="#c0392b" stroke="#333"/>
+  <text x="1020" y="455" text-anchor="middle" class="node">⭐ Quality Incentives</text>
+  <text x="1020" y="475" text-anchor="middle" class="node">• High-quality data rewards • Premium session bonuses</text>
+  <text x="1020" y="490" text-anchor="middle" class="node">• Excellence multipliers • Deflationary pressure</text>
+  
+  <!-- Value Appreciation -->
+  <rect x="50" y="540" width="1300" height="140" rx="10" fill="#f39c12" stroke="#333" stroke-width="2"/>
+  <text x="700" y="570" text-anchor="middle" class="cluster">📈 Value Appreciation Mechanics</text>
+  
+  <rect x="80" y="590" width="600" height="80" rx="8" fill="#f39c12" stroke="#333"/>
+  <text x="380" y="615" text-anchor="middle" class="node">📊 Demand Drivers</text>
+  <text x="380" y="635" text-anchor="middle" class="node">• More Sensei joining: +15% • Higher session quality</text>
+  <text x="380" y="650" text-anchor="middle" class="node">• Unique data contributions • AI enhancement value</text>
+  
+  <rect x="720" y="590" width="600" height="80" rx="8" fill="#e67e22" stroke="#333"/>
+  <text x="1020" y="615" text-anchor="middle" class="node">💎 Scarcity Factors</text>
+  <text x="1020" y="635" text-anchor="middle" class="node">• Limited high-quality data • Expert knowledge premium</text>
+  <text x="1020" y="650" text-anchor="middle" class="node">• NFT minting burns • Rebase adjustments</text>
+  
+  <!-- Revenue Distribution -->
+  <rect x="50" y="700" width="1300" height="180" rx="10" fill="#9b59b6" stroke="#333" stroke-width="2"/>
+  <text x="700" y="730" text-anchor="middle" class="cluster">🎯 Revenue Distribution Model</text>
+  
+  <rect x="80" y="750" width="400" height="120" rx="8" fill="#f39c12" stroke="#333"/>
+  <text x="280" y="775" text-anchor="middle" class="node">👨‍🏫 Sensei Revenue (60%)</text>
+  <text x="280" y="795" text-anchor="middle" class="node">• Session payments: 45%</text>
+  <text x="280" y="815" text-anchor="middle" class="node">• Data contribution rewards: 10%</text>
+  <text x="280" y="835" text-anchor="middle" class="node">• NFT sales (50% split): 5%</text>
+  <text x="280" y="855" text-anchor="middle" class="node">• Quality bonuses: Variable</text>
+  
+  <rect x="500" y="750" width="400" height="120" rx="8" fill="#9b59b6" stroke="#333"/>
+  <text x="700" y="775" text-anchor="middle" class="node">👨‍🎓 Student Revenue (25%)</text>
+  <text x="700" y="795" text-anchor="middle" class="node">• NFT resale profits (50% split)</text>
+  <text x="700" y="815" text-anchor="middle" class="node">• Learning achievement rewards</text>
+  <text x="700" y="835" text-anchor="middle" class="node">• Community participation</text>
+  <text x="700" y="855" text-anchor="middle" class="node">• Referral bonuses</text>
+  
+  <rect x="920" y="750" width="400" height="120" rx="8" fill="#34495e" stroke="#333"/>
+  <text x="1120" y="775" text-anchor="middle" class="node">🏛️ Platform Revenue (15%)</text>
+  <text x="1120" y="795" text-anchor="middle" class="node">• Transaction fees: 3%</text>
+  <text x="1120" y="815" text-anchor="middle" class="node">• Premium features: 7%</text>
+  <text x="1120" y="835" text-anchor="middle" class="node">• Data processing: 3%</text>
+  <text x="1120" y="855" text-anchor="middle" class="node">• Development fund: 2%</text>
+  
+  <!-- Rebalancing System -->
+  <rect x="50" y="900" width="1300" height="80" rx="10" fill="#e67e22" stroke="#333" stroke-width="2"/>
+  <text x="700" y="930" text-anchor="middle" class="cluster">🔄 Rebalancing System</text>
+  <text x="700" y="955" text-anchor="middle" class="node">⚖️ Automatic Rebase every 24 hours • Adjusts mint rates • Maintains 110-130% backing ratio • Prevents hyperinflation</text>
+  
+  <!-- Arrows showing economic flows -->
+  <path d="M 700 200 L 700 220" class="arrow"/>
+  <path d="M 700 360 L 700 380" class="arrow"/>
+  <path d="M 700 520 L 700 540" class="arrow"/>
+  <path d="M 700 680 L 700 700" class="arrow"/>
+  <path d="M 700 880 L 700 900" class="arrow"/>
+  
+  <!-- Cross-connections -->
+  <path d="M 380 350 L 700 590" class="arrow dashed"/>
+  <path d="M 1020 350 L 700 590" class="arrow dashed"/>
+  <path d="M 380 510 L 700 590" class="arrow dashed"/>
+  <path d="M 1020 510 L 700 590" class="arrow dashed"/>
+  <path d="M 280 870 L 700 750" class="arrow dashed"/>
+  <path d="M 700 870 L 700 750" class="arrow dashed"/>
+  <path d="M 1120 870 L 700 750" class="arrow dashed"/>
+</svg>
+
+
+
+
+

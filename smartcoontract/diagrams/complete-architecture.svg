@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: bold 24px Arial; fill: #2c3e50; }
+      .subtitle { font: bold 18px Arial; fill: #34495e; }
+      .node { font: 14px Arial; fill: #2c3e50; }
+      .cluster { font: bold 16px Arial; fill: #ffffff; }
+      .arrow { stroke: #7f8c8d; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .dashed { stroke-dasharray: 5,5; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7f8c8d"/>
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" class="title">🌟 Complete Sensei Knowledge Economy Architecture</text>
+  
+  <!-- Gateway Layer -->
+  <rect x="50" y="80" width="1100" height="100" rx="10" fill="#ff6b6b" stroke="#333" stroke-width="3"/>
+  <text x="600" y="110" text-anchor="middle" class="cluster">🚪 Gateway Layer (All Access)</text>
+  <text x="600" y="135" text-anchor="middle" class="node">🏛️ SenseiGateway - Central Access Control</text>
+  <text x="600" y="155" text-anchor="middle" class="node">• User Registration • Session Management • Token Operations • NFT Minting • Data Contributions</text>
+  
+  <!-- LazAI Security Infrastructure -->
+  <rect x="50" y="200" width="1100" height="120" rx="10" fill="#9b59b6" stroke="#333" stroke-width="2"/>
+  <text x="600" y="230" text-anchor="middle" class="cluster">🛡️ LazAI Security Infrastructure</text>
+  
+  <rect x="80" y="250" width="300" height="60" rx="8" fill="#e74c3c" stroke="#333"/>
+  <text x="230" y="275" text-anchor="middle" class="node">🔐 LazAISecurity</text>
+  <text x="230" y="295" text-anchor="middle" class="node">• OpenPGP Encryption • TEE Verification</text>
+  
+  <rect x="450" y="250" width="300" height="60" rx="8" fill="#e74c3c" stroke="#333"/>
+  <text x="600" y="275" text-anchor="middle" class="node">💎 DataAnchoringToken (DAT)</text>
+  <text x="600" y="295" text-anchor="middle" class="node">Semi-Fungible Tokens for AI Data</text>
+  
+  <rect x="820" y="250" width="300" height="60" rx="8" fill="#2c3e50" stroke="#333"/>
+  <text x="970" y="275" text-anchor="middle" class="node">🔒 TEE Verifiers</text>
+  <text x="970" y="295" text-anchor="middle" class="node">• Data Integrity • Privacy Compliance</text>
+  
+  <!-- User & AI Management -->
+  <rect x="50" y="340" width="1100" height="100" rx="10" fill="#3498db" stroke="#333" stroke-width="2"/>
+  <text x="600" y="370" text-anchor="middle" class="cluster">👥 User & AI Management</text>
+  
+  <rect x="80" y="390" width="500" height="40" rx="8" fill="#3498db" stroke="#333"/>
+  <text x="330" y="410" text-anchor="middle" class="node">📋 SenseiRegistry - Profile Management & Rating System</text>
+  
+  <rect x="620" y="390" width="500" height="40" rx="8" fill="#f9ca24" stroke="#333"/>
+  <text x="870" y="410" text-anchor="middle" class="node">🤖 SensayAI - Personal AI Assistants & Secure Data Access</text>
+  
+  <!-- Economic Engine -->
+  <rect x="50" y="460" width="1100" height="100" rx="10" fill="#4ecdc4" stroke="#333" stroke-width="2"/>
+  <text x="600" y="490" text-anchor="middle" class="cluster">💰 Economic Engine</text>
+  
+  <rect x="80" y="510" width="500" height="40" rx="8" fill="#4ecdc4" stroke="#333"/>
+  <text x="330" y="530" text-anchor="middle" class="node">💰 SenseiToken - Floating Stablecoin with Dynamic Minting & Knowledge Backing</text>
+  
+  <rect x="620" y="510" width="500" height="40" rx="8" fill="#4ecdc4" stroke="#333"/>
+  <text x="870" y="530" text-anchor="middle" class="node">📚 KnowledgeSession - Session Lifecycle & Payment Escrow</text>
+  
+  <!-- NFT & Rewards System -->
+  <rect x="50" y="580" width="1100" height="80" rx="10" fill="#45b7d1" stroke="#333" stroke-width="2"/>
+  <text x="600" y="610" text-anchor="middle" class="cluster">🎨 NFT & Rewards System</text>
+  <text x="600" y="635" text-anchor="middle" class="node">🖼️ LessonNFT - Single NFT per Session with 50/50 Revenue Split & Quality-based Pricing</text>
+  
+  <!-- User Types -->
+  <rect x="50" y="680" width="1100" height="100" rx="10" fill="#95a5a6" stroke="#333" stroke-width="2"/>
+  <text x="600" y="710" text-anchor="middle" class="cluster">👥 Platform Users</text>
+  
+  <rect x="80" y="730" width="350" height="40" rx="8" fill="#e67e22" stroke="#333"/>
+  <text x="255" y="750" text-anchor="middle" class="node">👨‍🏫 Sensei (Knowledge Providers) - Retirees & Experts</text>
+  
+  <rect x="450" y="730" width="350" height="40" rx="8" fill="#9b59b6" stroke="#333"/>
+  <text x="625" y="750" text-anchor="middle" class="node">👨‍🎓 Students & Learners - Knowledge Seekers</text>
+  
+  <rect x="820" y="730" width="300" height="40" rx="8" fill="#34495e" stroke="#333"/>
+  <text x="970" y="750" text-anchor="middle" class="node">💰 Token Holders - Economic Participants</text>
+  
+  <!-- Arrows showing data flow -->
+  <path d="M 600 180 L 600 200" class="arrow"/>
+  <path d="M 600 320 L 600 340" class="arrow"/>
+  <path d="M 600 440 L 600 460" class="arrow"/>
+  <path d="M 600 560 L 600 580" class="arrow"/>
+  <path d="M 600 660 L 600 680" class="arrow"/>
+  
+  <!-- Cross-connections -->
+  <path d="M 230 310 L 330 390" class="arrow dashed"/>
+  <path d="M 600 310 L 870 390" class="arrow dashed"/>
+  <path d="M 970 310 L 870 390" class="arrow dashed"/>
+  <path d="M 330 550 L 600 510" class="arrow dashed"/>
+  <path d="M 870 550 L 600 510" class="arrow dashed"/>
+  <path d="M 600 630 L 600 510" class="arrow dashed"/>
+</svg>
+
+
+
+
+
