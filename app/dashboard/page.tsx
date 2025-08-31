@@ -1,6 +1,5 @@
 "use client"
 
-import { useAuth } from "@/components/auth-provider"
 import { useReplica } from "@/lib/replica"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -26,22 +25,32 @@ import {
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import {
+  ConnectWallet,
+  Wallet,
+  WalletDropdown,
+  WalletDropdownDisconnect,
+  WalletModal,
+} from "@coinbase/onchainkit/wallet"
+import {
+  Name,
+  Identity,
+  Address,
+  Avatar as CoinbaseAvatar,
+  EthBalance,
+} from "@coinbase/onchainkit/identity"
 
 export default function DashboardPage() {
-  const { user } = useAuth()
   const { replicas } = useReplica()
   const router = useRouter()
   const [aiPersonaProgress, setAiPersonaProgress] = useState(65)
   const [isWithdrawalModalOpen, setIsWithdrawalModalOpen] = useState(false)
+  const [showWalletModal, setShowWalletModal] = useState(false)
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/")
-    }
-  }, [user, router])
-
-  if (!user) {
-    return null
+  // For demo purposes, we'll use a mock user since we're not using the auth system anymore
+  const user = {
+    name: "Demo User",
+    walletAddress: "0x742d35Cc6634C0532925a3b8D4C9db96590b5b8c"
   }
 
   const userReplica = replicas[0] // For demo, assume user has one replica
@@ -81,10 +90,27 @@ export default function DashboardPage() {
                 <span>Dashboard</span>
               </div>
             </div>
-            <Button variant="outline" onClick={() => router.push("/profile")}>
-              <User className="h-4 w-4 mr-2" />
-              Profile
-            </Button>
+            <div className="flex items-center gap-4">
+              <Wallet className="z-10">
+                <ConnectWallet>
+                  <Name className="text-inherit" />
+                </ConnectWallet>
+                <WalletDropdown>
+                  <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+                    <CoinbaseAvatar />
+                    <Name />
+                    <Address />
+                    <EthBalance />
+                  </Identity>
+                  <WalletDropdownDisconnect />
+                </WalletDropdown>
+                <WalletModal isOpen={showWalletModal} onClose={() => setShowWalletModal(false)} />
+              </Wallet>
+              <Button variant="outline" onClick={() => router.push("/profile")}>
+                <User className="h-4 w-4 mr-2" />
+                Profile
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -92,7 +118,7 @@ export default function DashboardPage() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Welcome Section */}
         <div className="mb-8">
-                     <h1 className="text-3xl font-bold text-foreground mb-2">Welcome back, {user.name || "User"}!</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Welcome back, {user.name || "User"}!</h1>
           <p className="text-muted-foreground">Manage your AI replica and track your knowledge sharing journey.</p>
         </div>
 

@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/components/auth-provider"
-import { WalletConnect } from "@/components/wallet-connect"
 import { Menu, X, Brain, User, LogOut } from "lucide-react"
 import {
   DropdownMenu,
@@ -13,9 +12,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  ConnectWallet,
+  Wallet,
+  WalletDropdown,
+  WalletDropdownDisconnect,
+  WalletModal,
+} from "@coinbase/onchainkit/wallet"
+import {
+  Name,
+  Identity,
+  Address,
+  Avatar as CoinbaseAvatar,
+  EthBalance,
+} from "@coinbase/onchainkit/identity"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [showWalletModal, setShowWalletModal] = useState(false)
   const { user, logout } = useAuth()
 
   return (
@@ -84,7 +98,21 @@ export function Header() {
                 <User className="h-4 w-4 mr-2" />
                 Sign In
               </Button>
-              <WalletConnect />
+              <Wallet className="z-10">
+                <ConnectWallet>
+                  <Name className="text-inherit" />
+                </ConnectWallet>
+                <WalletDropdown>
+                  <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+                    <CoinbaseAvatar />
+                    <Name />
+                    <Address />
+                    <EthBalance />
+                  </Identity>
+                  <WalletDropdownDisconnect />
+                </WalletDropdown>
+                <WalletModal isOpen={showWalletModal} onClose={() => setShowWalletModal(false)} />
+              </Wallet>
             </>
           )}
         </nav>
@@ -128,7 +156,21 @@ export function Header() {
                     <User className="h-4 w-4 mr-2" />
                     Sign In
                   </Button>
-                  <WalletConnect />
+                  <Wallet className="z-10">
+                    <ConnectWallet>
+                      <Name className="text-inherit" />
+                    </ConnectWallet>
+                    <WalletDropdown>
+                      <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+                        <CoinbaseAvatar />
+                        <Name />
+                        <Address />
+                        <EthBalance />
+                      </Identity>
+                      <WalletDropdownDisconnect />
+                    </WalletDropdown>
+                    <WalletModal isOpen={showWalletModal} onClose={() => setShowWalletModal(false)} />
+                  </Wallet>
                 </>
               )}
             </div>

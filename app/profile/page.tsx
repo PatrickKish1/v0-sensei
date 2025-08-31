@@ -1,6 +1,5 @@
 "use client"
 
-import { useAuth } from "@/components/auth-provider"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,11 +11,25 @@ import { Switch } from "@/components/ui/switch"
 import { Brain, User, Settings, Upload, Star, MessageCircle } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import {
+  ConnectWallet,
+  Wallet,
+  WalletDropdown,
+  WalletDropdownDisconnect,
+  WalletModal,
+} from "@coinbase/onchainkit/wallet"
+import {
+  Name,
+  Identity,
+  Address,
+  Avatar as CoinbaseAvatar,
+  EthBalance,
+} from "@coinbase/onchainkit/identity"
 
 export default function ProfilePage() {
-  const { user, updateProfile } = useAuth()
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
+  const [showWalletModal, setShowWalletModal] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     bio: "",
@@ -24,26 +37,30 @@ export default function ProfilePage() {
     isExpert: false,
   })
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/")
-      return
-    }
+  // For demo purposes, we'll use a mock user since we're not using the auth system anymore
+  const user = {
+    name: "Demo User",
+    walletAddress: "0x742d35Cc6634C0532925a3b8D4C9db96590b5b8c",
+    bio: "Passionate about AI and blockchain technology",
+    expertise: ["AI", "Blockchain"],
+    isExpert: false,
+    joinedAt: new Date(),
+    ensName: undefined,
+    avatar: undefined
+  }
 
+  useEffect(() => {
     setFormData({
       name: user.name || "",
       bio: user.bio || "",
       expertise: user.expertise || [],
       isExpert: user.isExpert || false,
     })
-  }, [user, router])
-
-  if (!user) {
-    return null
-  }
+  }, [user])
 
   const handleSave = async () => {
-    await updateProfile(formData)
+    // In a real app, this would update the user profile
+    console.log("Saving profile:", formData)
     setIsEditing(false)
   }
 
@@ -68,15 +85,34 @@ export default function ProfilePage() {
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => router.push("/")}>
-              <Brain className="h-6 w-6 text-primary mr-2" />
-              Sensei
-            </Button>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <span>/</span>
-              <User className="h-4 w-4" />
-              <span>Profile</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" onClick={() => router.push("/")}>
+                <Brain className="h-6 w-6 text-primary mr-2" />
+                Sensei
+              </Button>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <span>/</span>
+                <User className="h-4 w-4" />
+                <span>Profile</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <Wallet className="z-10">
+                <ConnectWallet>
+                  <Name className="text-inherit" />
+                </ConnectWallet>
+                <WalletDropdown>
+                  <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+                    <CoinbaseAvatar />
+                    <Name />
+                    <Address />
+                    <EthBalance />
+                  </Identity>
+                  <WalletDropdownDisconnect />
+                </WalletDropdown>
+                <WalletModal isOpen={showWalletModal} onClose={() => setShowWalletModal(false)} />
+              </Wallet>
             </div>
           </div>
         </div>
@@ -137,13 +173,13 @@ export default function ProfilePage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
-                                  <Label htmlFor="name">Display Name</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                  placeholder="Enter your display name"
-                />
+                  <Label htmlFor="name">Display Name</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                    placeholder="Enter your display name"
+                  />
                 </div>
 
                 <div className="space-y-2">

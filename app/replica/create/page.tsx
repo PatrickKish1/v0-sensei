@@ -4,7 +4,6 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/components/auth-provider"
 import { useReplica } from "@/lib/replica"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,6 +15,20 @@ import { Progress } from "@/components/ui/progress"
 import { Brain, ArrowLeft, ArrowRight, Upload, DollarSign, Clock, CheckCircle } from "lucide-react"
 import { ENSRegistration } from "@/components/ens/ens-registration"
 import type { ENSRegistration as ENSRegistrationType } from "@/lib/ens"
+import {
+  ConnectWallet,
+  Wallet,
+  WalletDropdown,
+  WalletDropdownDisconnect,
+  WalletModal,
+} from "@coinbase/onchainkit/wallet"
+import {
+  Name,
+  Identity,
+  Address,
+  Avatar as CoinbaseAvatar,
+  EthBalance,
+} from "@coinbase/onchainkit/identity"
 
 const steps = [
   { number: 1, title: "Basic Info", description: "Name and describe your replica" },
@@ -29,11 +42,17 @@ const steps = [
 ]
 
 export default function CreateReplicaPage() {
-  const { user } = useAuth()
   const { createReplica } = useReplica()
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [isCreating, setIsCreating] = useState(false)
+  const [showWalletModal, setShowWalletModal] = useState(false)
+
+  // For demo purposes, we'll use a mock user since we're not using the auth system anymore
+  const user = {
+    name: "Demo User",
+    walletAddress: "0x742d35Cc6634C0532925a3b8D4C9db96590b5b8c"
+  }
 
   const [replicaData, setReplicaData] = useState({
     name: "",
@@ -48,11 +67,6 @@ export default function CreateReplicaPage() {
     ensRegistration: null as ENSRegistrationType | null,
     files: [] as File[],
   })
-
-  if (!user) {
-    router.push("/")
-    return null
-  }
 
   const handleNext = () => {
     if (currentStep < steps.length) {
@@ -362,14 +376,33 @@ export default function CreateReplicaPage() {
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => router.push("/dashboard")}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Dashboard
-            </Button>
-            <div className="flex items-center gap-2">
-              <Brain className="h-6 w-6 text-primary" />
-              <span className="font-semibold">Create AI Replica</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" onClick={() => router.push("/dashboard")}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Dashboard
+              </Button>
+              <div className="flex items-center gap-2">
+                <Brain className="h-6 w-6 text-primary" />
+                <span className="font-semibold">Create AI Replica</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <Wallet className="z-10">
+                <ConnectWallet>
+                  <Name className="text-inherit" />
+                </ConnectWallet>
+                <WalletDropdown>
+                  <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+                    <CoinbaseAvatar />
+                    <Name />
+                    <Address />
+                    <EthBalance />
+                  </Identity>
+                  <WalletDropdownDisconnect />
+                </WalletDropdown>
+                <WalletModal isOpen={showWalletModal} onClose={() => setShowWalletModal(false)} />
+              </Wallet>
             </div>
           </div>
         </div>

@@ -4,7 +4,6 @@ import type React from "react"
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/components/auth-provider"
 import { useReplica, type Replica } from "@/lib/replica"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -28,12 +27,32 @@ import {
   Play,
   Pause,
 } from "lucide-react"
+import {
+  ConnectWallet,
+  Wallet,
+  WalletDropdown,
+  WalletDropdownDisconnect,
+  WalletModal,
+} from "@coinbase/onchainkit/wallet"
+import {
+  Name,
+  Identity,
+  Address,
+  Avatar as CoinbaseAvatar,
+  EthBalance,
+} from "@coinbase/onchainkit/identity"
 
 export default function ReplicaDetailPage({ params }: { params: { id: string } }) {
-  const { user } = useAuth()
   const { replicas, uploadContent, deleteContent } = useReplica()
   const router = useRouter()
   const [replica, setReplica] = useState<Replica | null>(null)
+  const [showWalletModal, setShowWalletModal] = useState(false)
+
+  // For demo purposes, we'll use a mock user since we're not using the auth system anymore
+  const user = {
+    name: "Demo User",
+    walletAddress: "0x742d35Cc6634C0532925a3b8D4C9db96590b5b8c"
+  }
 
   useEffect(() => {
     const foundReplica = replicas.find((r) => r.id === params.id)
@@ -44,7 +63,7 @@ export default function ReplicaDetailPage({ params }: { params: { id: string } }
     }
   }, [replicas, params.id, router])
 
-  if (!user || !replica) {
+  if (!replica) {
     return null
   }
 
@@ -107,6 +126,21 @@ export default function ReplicaDetailPage({ params }: { params: { id: string } }
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <Wallet className="z-10">
+                <ConnectWallet>
+                  <Name className="text-inherit" />
+                </ConnectWallet>
+                <WalletDropdown>
+                  <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+                    <CoinbaseAvatar />
+                    <Name />
+                    <Address />
+                    <EthBalance />
+                  </Identity>
+                  <WalletDropdownDisconnect />
+                </WalletDropdown>
+                <WalletModal isOpen={showWalletModal} onClose={() => setShowWalletModal(false)} />
+              </Wallet>
               <Button variant="outline" size="sm">
                 <Settings className="h-4 w-4 mr-2" />
                 Settings
