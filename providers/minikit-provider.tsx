@@ -1,10 +1,11 @@
 "use client"
 
+import { type ReactNode } from "react";
 import { MiniKitProvider } from "@coinbase/onchainkit/minikit"
 import { base } from "wagmi/chains"
-import type { ReactNode } from "react"
 
-export function MiniKit({ children }: { children: ReactNode }) {
+
+export function MiniKit(props: { children: ReactNode }) {
   return (
     <MiniKitProvider
       apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
@@ -12,13 +13,13 @@ export function MiniKit({ children }: { children: ReactNode }) {
       config={{
         appearance: {
           mode: "auto",
-          theme: "base",
+          theme: "mini-app-theme",
           name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
           logo: process.env.NEXT_PUBLIC_ICON_URL,
         },
       }}
     >
-      {children}
+      {props.children}
     </MiniKitProvider>
   )
 }

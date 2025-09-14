@@ -1,5 +1,8 @@
+import "./theme.css";
 import type React from "react"
+import "@coinbase/onchainkit/styles.css";
 import type { Metadata } from "next"
+import "./globals.css"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
@@ -8,7 +11,6 @@ import { Web3Provider } from "@/providers/web3-provider"
 import { MiniKit } from "@/providers/minikit-provider"
 import { ReplicaProvider } from "@/lib/replica"
 import { Suspense } from "react"
-import "./globals.css"
 
 export const metadata: Metadata = {
   title: "Project Sensei - AI-Powered Knowledge Sharing",

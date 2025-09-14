@@ -1,7 +1,11 @@
 // Contract Addresses - Update these with actual deployed addresses
-export const SENSEI_GATEWAY_ADDRESS = "" as const
-export const SENSEI_TOKEN_ADDRESS = "" as const
-export const LESSON_NFT_ADDRESS = "" as const
+export const SENSEI_GATEWAY_ADDRESS = "0x29093Ff500182955DEE90bAC5BA4cfF737677258" as const
+export const SENSEI_TOKEN_ADDRESS = "0x46d781382eE9EDDa5f716202D4cd7228fbDEefd0" as const
+export const LESSON_NFT_ADDRESS = "0x0fA0Aa3f4F4E3fA7dB525CA9ffb4D50e26fEB295" as const
+export const SENSEI_REGISTRY_ADDRESS = "0x944f3c7305598e724aBFBAAEc4ee93a3b2Db7DDa" as const
+export const BOOKING_SYSTEM_ADDRESS = "0x2959309600848dF7d3F4F12e651833C41fd58773" as const
+export const SENSAY_AI_ADDRESS = "0x7B36c8C4588d2834170a3979f0398f97333a32C7" as const
+export const PRIVACY_MANAGER_ADDRESS = "0xF0b957Bc9b004788a512685a5Db9c695CbBf2c52" as const
 
 // Sensei Gateway ABI
 export const SENSEI_GATEWAY_ABI = [

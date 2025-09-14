@@ -1,369 +1,461 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useReplica } from "@/lib/replica"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Brain, ArrowLeft, ArrowRight, Upload, DollarSign, Clock, CheckCircle } from "lucide-react"
-import { ENSRegistration } from "@/components/ens/ens-registration"
-import type { ENSRegistration as ENSRegistrationType } from "@/lib/ens"
-import {
-  ConnectWallet,
-  Wallet,
-  WalletDropdown,
-  WalletDropdownDisconnect,
-  WalletModal,
+import { 
+  Wallet, 
+  WalletDropdown, 
+  ConnectWallet
 } from "@coinbase/onchainkit/wallet"
-import {
-  Name,
-  Identity,
-  Address,
-  Avatar as CoinbaseAvatar,
-  EthBalance,
-} from "@coinbase/onchainkit/identity"
+import { useMiniKit } from "@coinbase/onchainkit/minikit"
+import { 
+  ArrowLeft, 
+  ArrowRight, 
+  Brain, 
+  Upload, 
+  User, 
+  BookOpen, 
+  Coins,
+  CheckCircle,
+  Circle,
+  Plus,
+  X
+} from "lucide-react"
+import { useAccount } from "wagmi"
+import { Avatar, EthBalance, Name } from "@coinbase/onchainkit/identity"
 
-const steps = [
-  { number: 1, title: "Basic Info", description: "Name and describe your replica" },
-  { number: 2, title: "Expertise", description: "Areas of knowledge" },
-  { number: 3, title: "Personality", description: "AI behavior settings" },
-  { number: 4, title: "ENS Name", description: "Blockchain identity" },
-  { number: 5, title: "Pricing", description: "Set your session rates" },
-  { number: 6, title: "Availability", description: "Configure your schedule" },
-  { number: 7, title: "Content", description: "Upload training materials" },
-  { number: 8, title: "Review", description: "Review and create" },
-]
+// Mock user for demo purposes
+const mockUser = {
+  name: "Alex Johnson",
+  walletAddress: "0x1234...5678",
+  avatar: "/avatars/alex.jpg"
+}
 
 export default function CreateReplicaPage() {
-  const { createReplica } = useReplica()
   const router = useRouter()
+  const { isConnected } = useAccount()
   const [currentStep, setCurrentStep] = useState(1)
-  const [isCreating, setIsCreating] = useState(false)
-  const [showWalletModal, setShowWalletModal] = useState(false)
-
-  // For demo purposes, we'll use a mock user since we're not using the auth system anymore
-  const user = {
-    name: "Demo User",
-    walletAddress: "0x742d35Cc6634C0532925a3b8D4C9db96590b5b8c"
-  }
-
   const [replicaData, setReplicaData] = useState({
     name: "",
-    description: "",
-    expertise: [] as string[],
-    personality: "professional",
-    responseStyle: "detailed",
-    availability: "always",
-    pricing: 10,
-    greeting: "Hello! I'm here to help you learn and grow.",
-    purpose: "To share knowledge and expertise in a helpful and engaging way.",
-    ensRegistration: null as ENSRegistrationType | null,
-    files: [] as File[],
+    expertise: "",
+    bio: "",
+    greeting: "",
+    purpose: "",
+    hourlyRate: "",
+    availability: "",
+    contentTypes: [] as string[],
+    documents: [] as File[]
   })
 
-  const handleNext = () => {
-    if (currentStep < steps.length) {
+  const totalSteps = 4
+
+  const nextStep = () => {
+    if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
     }
   }
 
-  const handlePrevious = () => {
+  const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1)
     }
   }
 
-  const handleCreate = async () => {
-    setIsCreating(true)
-    try {
-      const replica = await createReplica(replicaData)
-      router.push(`/replica/${replica.id}`)
-    } catch (error) {
-      console.error("Failed to create replica:", error)
-    } finally {
-      setIsCreating(false)
-    }
+  const handleInputChange = (field: string, value: string | string[]) => {
+    setReplicaData(prev => ({ ...prev, [field]: value }))
   }
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
-    setReplicaData((prev) => ({ ...prev, files: [...prev.files, ...files] }))
+  const handleFileUpload = (files: FileList | null) => {
+    if (files) {
+      const newFiles = Array.from(files)
+      setReplicaData(prev => ({
+        ...prev,
+        documents: [...prev.documents, ...newFiles]
+      }))
+    }
   }
 
   const removeFile = (index: number) => {
-    setReplicaData((prev) => ({
+    setReplicaData(prev => ({
       ...prev,
-      files: prev.files.filter((_, i) => i !== index),
+      documents: prev.documents.filter((_, i) => i !== index)
     }))
   }
 
-  const handleENSRegistration = (ensName: string) => {
-    // Create a mock ENS registration object since we only get the name
-    const mockRegistration: ENSRegistrationType = {
-      name: ensName,
-      address: "0x...", // Will be filled when actually registered
-      owner: "0x...",
-      registrationDate: new Date(),
-      expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-      status: "pending"
-    }
-    setReplicaData((prev) => ({ ...prev, ensRegistration: mockRegistration }))
-    setCurrentStep(5) // Move to pricing step
+  const handleCreate = async () => {
+    // Mock creation - in real app, this would call the smart contract
+    console.log("Creating replica:", replicaData)
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    // Redirect to dashboard
+    router.push("/dashboard")
   }
+
+  const renderStepIndicator = () => (
+    <div className="mb-8">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Create AI Replica</h1>
+        <Button variant="outline" size="sm" onClick={() => router.push("/dashboard")}>
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+      </div>
+      
+      {/* Mobile Step Indicator */}
+      <div className="lg:hidden">
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-sm font-medium text-gray-600">
+            Step {currentStep} of {totalSteps}
+          </span>
+          <span className="text-sm text-gray-500">
+            {Math.round((currentStep / totalSteps) * 100)}%
+          </span>
+        </div>
+        <Progress value={(currentStep / totalSteps) * 100} className="h-2" />
+      </div>
+
+      {/* Desktop Step Indicator */}
+      <div className="hidden lg:flex items-center justify-between">
+        {[1, 2, 3, 4].map((step) => (
+          <div key={step} className="flex items-center">
+            <div className={`
+              flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors
+              ${step < currentStep 
+                ? 'bg-green-500 border-green-500 text-white' 
+                : step === currentStep 
+                  ? 'bg-blue-500 border-blue-500 text-white' 
+                  : 'bg-gray-100 border-gray-300 text-gray-500'
+              }
+            `}>
+              {step < currentStep ? (
+                <CheckCircle className="h-5 w-5" />
+              ) : (
+                <span className="text-sm font-medium">{step}</span>
+              )}
+            </div>
+            {step < totalSteps && (
+              <div className={`
+                w-16 h-0.5 mx-2 transition-colors
+                ${step < currentStep ? 'bg-green-500' : 'bg-gray-300'}
+              `} />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Step Labels */}
+      <div className="hidden lg:grid grid-cols-4 gap-4 mt-4">
+        <div className="text-center">
+          <p className="text-sm font-medium text-gray-900">Basic Info</p>
+        </div>
+        <div className="text-center">
+          <p className="text-sm font-medium text-gray-900">Expertise</p>
+        </div>
+        <div className="text-center">
+          <p className="text-sm font-medium text-gray-900">Content</p>
+        </div>
+        <div className="text-center">
+          <p className="text-sm font-medium text-gray-900">Review</p>
+        </div>
+      </div>
+    </div>
+  )
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="name">Replica Name</Label>
-              <Input
-                id="name"
-                value={replicaData.name}
-                onChange={(e) => setReplicaData((prev) => ({ ...prev, name: e.target.value }))}
-                placeholder="e.g., Dr. Sarah's AI Assistant"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                value={replicaData.description}
-                onChange={(e) => setReplicaData((prev) => ({ ...prev, description: e.target.value }))}
-                placeholder="Describe your expertise and what learners can expect..."
-                rows={4}
-              />
-            </div>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Basic Information
+              </CardTitle>
+              <CardDescription>
+                Start by providing the basic details for your AI replica
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="name">Replica Name</Label>
+                <Input
+                  id="name"
+                  placeholder="e.g., Albert Einstein, Marie Curie"
+                  value={replicaData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  className="h-12"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="bio">Short Bio</Label>
+                <Textarea
+                  id="bio"
+                  placeholder="Describe your replica's background and expertise..."
+                  value={replicaData.bio}
+                  onChange={(e) => handleInputChange("bio", e.target.value)}
+                  rows={4}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="greeting">Welcome Message</Label>
+                <Textarea
+                  id="greeting"
+                  placeholder="How should your replica greet users?"
+                  value={replicaData.greeting}
+                  onChange={(e) => handleInputChange("greeting", e.target.value)}
+                  rows={3}
+                />
+              </div>
+            </CardContent>
+          </Card>
         )
 
       case 2:
         return (
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="expertise">Expertise Areas</Label>
-              <Input
-                id="expertise"
-                value={replicaData.expertise.join(", ")}
-                onChange={(e) =>
-                  setReplicaData((prev) => ({ ...prev, expertise: e.target.value.split(", ").filter(Boolean) }))
-                }
-                placeholder="e.g., Medicine, Psychology"
-              />
-            </div>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5" />
+                Expertise & Purpose
+              </CardTitle>
+              <CardDescription>
+                Define what your replica specializes in and how it will help users
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="expertise">Primary Expertise</Label>
+                <Input
+                  id="expertise"
+                  placeholder="e.g., Physics, Chemistry, Machine Learning"
+                  value={replicaData.expertise}
+                  onChange={(e) => handleInputChange("expertise", e.target.value)}
+                  className="h-12"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="purpose">Purpose & Goals</Label>
+                <Textarea
+                  id="purpose"
+                  placeholder="What is the main purpose of this replica? How will it help users?"
+                  value={replicaData.purpose}
+                  onChange={(e) => handleInputChange("purpose", e.target.value)}
+                  rows={4}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="hourlyRate">Hourly Rate (ETH)</Label>
+                  <Input
+                    id="hourlyRate"
+                    type="number"
+                    step="0.01"
+                    placeholder="0.01"
+                    value={replicaData.hourlyRate}
+                    onChange={(e) => handleInputChange("hourlyRate", e.target.value)}
+                    className="h-12"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="availability">Availability</Label>
+                  <Select value={replicaData.availability} onValueChange={(value) => handleInputChange("availability", value)}>
+                    <SelectTrigger className="h-12">
+                      <SelectValue placeholder="Select availability" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="24/7">24/7 Available</SelectItem>
+                      <SelectItem value="business-hours">Business Hours</SelectItem>
+                      <SelectItem value="weekdays">Weekdays Only</SelectItem>
+                      <SelectItem value="custom">Custom Schedule</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         )
 
       case 3:
         return (
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="personality">Personality</Label>
-              <Select
-                value={replicaData.personality}
-                onValueChange={(value) =>
-                  setReplicaData((prev) => ({
-                    ...prev,
-                    personality: value,
-                  }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="professional">Professional</SelectItem>
-                  <SelectItem value="friendly">Friendly</SelectItem>
-                  <SelectItem value="serious">Serious</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="responseStyle">Response Style</Label>
-              <Select
-                value={replicaData.responseStyle}
-                onValueChange={(value) =>
-                  setReplicaData((prev) => ({
-                    ...prev,
-                    responseStyle: value,
-                  }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="detailed">Detailed</SelectItem>
-                  <SelectItem value="brief">Brief</SelectItem>
-                  <SelectItem value="casual">Casual</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Upload className="h-5 w-5" />
+                Content & Training
+              </CardTitle>
+              <CardDescription>
+                Upload documents and content to train your AI replica
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label>Content Types</Label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {["Documents", "Videos", "Audio", "Images"].map((type) => (
+                    <Button
+                      key={type}
+                      variant={replicaData.contentTypes.includes(type.toLowerCase()) ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => {
+                        const newTypes = replicaData.contentTypes.includes(type.toLowerCase())
+                          ? replicaData.contentTypes.filter(t => t !== type.toLowerCase())
+                          : [...replicaData.contentTypes, type.toLowerCase()]
+                        handleInputChange("contentTypes", newTypes)
+                      }}
+                      className="h-12"
+                    >
+                      {type}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Upload Documents</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-sm text-gray-600 mb-2">
+                    Drag and drop files here, or click to browse
+                  </p>
+                  <input
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.txt,.md"
+                    onChange={(e) => handleFileUpload(e.target.files)}
+                    className="hidden"
+                    id="file-upload"
+                  />
+                  <label htmlFor="file-upload">
+                    <Button variant="outline" size="sm" className="cursor-pointer">
+                      Choose Files
+                    </Button>
+                  </label>
+                </div>
+              </div>
+
+              {replicaData.documents.length > 0 && (
+                <div className="space-y-2">
+                  <Label>Uploaded Files</Label>
+                  <div className="space-y-2">
+                    {replicaData.documents.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <BookOpen className="h-4 w-4 text-gray-500" />
+                          <span className="text-sm font-medium">{file.name}</span>
+                          <span className="text-xs text-gray-500">
+                            ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                          </span>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeFile(index)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         )
 
       case 4:
         return (
-          <ENSRegistration
-            aiPersonaId={`replica-${Date.now()}`}
-            personaName={replicaData.name}
-            onRegistrationComplete={handleENSRegistration}
-          />
-        )
-
-      case 5:
-        return (
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="price">Price per Session</Label>
-              <Input
-                id="price"
-                type="number"
-                value={replicaData.pricing}
-                onChange={(e) =>
-                  setReplicaData((prev) => ({
-                    ...prev,
-                    pricing: Number(e.target.value),
-                  }))
-                }
-                placeholder="10"
-              />
-            </div>
-            <div className="p-4 bg-muted/50 rounded-lg">
-              <p className="text-sm text-muted-foreground">
-                Recommended pricing for your expertise level: $30-100 USD per session
-              </p>
-            </div>
-          </div>
-        )
-
-      case 6:
-        return (
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="timezone">Timezone</Label>
-              <Select
-                value={replicaData.availability}
-                onValueChange={(value) =>
-                  setReplicaData((prev) => ({
-                    ...prev,
-                    availability: value,
-                  }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="UTC">UTC</SelectItem>
-                  <SelectItem value="EST">Eastern Time</SelectItem>
-                  <SelectItem value="PST">Pacific Time</SelectItem>
-                  <SelectItem value="GMT">GMT</SelectItem>
-                  <SelectItem value="24/7">24/7 Available</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        )
-
-      case 7:
-        return (
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label>Upload Training Content</Label>
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
-                <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-sm text-muted-foreground mb-4">
-                  Upload documents, videos, or audio files to train your AI replica
-                </p>
-                <input
-                  type="file"
-                  multiple
-                  accept=".pdf,.doc,.docx,.txt,.mp4,.mp3,.wav"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                  id="file-upload"
-                />
-                <Button asChild variant="outline">
-                  <label htmlFor="file-upload" className="cursor-pointer">
-                    Choose Files
-                  </label>
-                </Button>
-              </div>
-            </div>
-
-            {replicaData.files.length > 0 && (
-              <div className="space-y-2">
-                <Label>Uploaded Files</Label>
-                <div className="space-y-2">
-                  {replicaData.files.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <div>
-                        <p className="text-sm font-medium">{file.name}</p>
-                        <p className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                      </div>
-                      <Button variant="ghost" size="sm" onClick={() => removeFile(index)}>
-                        Remove
-                      </Button>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5" />
+                Review & Create
+              </CardTitle>
+              <CardDescription>
+                Review your replica details before creating
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-gray-900">Basic Information</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Name:</span>
+                      <span className="font-medium">{replicaData.name}</span>
                     </div>
-                  ))}
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Expertise:</span>
+                      <span className="font-medium">{replicaData.expertise}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Hourly Rate:</span>
+                      <span className="font-medium">{replicaData.hourlyRate} ETH</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Availability:</span>
+                      <span className="font-medium">{replicaData.availability}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-gray-900">Content & Training</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Content Types:</span>
+                      <span className="font-medium">{replicaData.contentTypes.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Documents:</span>
+                      <span className="font-medium">{replicaData.documents.length}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            )}
-          </div>
-        )
 
-      case 8:
-        return (
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <div className="p-4 bg-muted/50 rounded-lg">
-                <h4 className="font-semibold mb-2">Replica Details</h4>
-                <p>
-                  <strong>Name:</strong> {replicaData.name}
-                </p>
-                <p>
-                  <strong>Description:</strong> {replicaData.description}
-                </p>
+              <div className="space-y-4">
+                <h4 className="font-semibold text-gray-900">Bio & Purpose</h4>
+                <div className="space-y-3">
+                  <div>
+                    <Label className="text-sm text-gray-600">Bio</Label>
+                    <p className="text-sm bg-gray-50 p-3 rounded-lg">{replicaData.bio}</p>
+                  </div>
+                  <div>
+                    <Label className="text-sm text-gray-600">Purpose</Label>
+                    <p className="text-sm bg-gray-50 p-3 rounded-lg">{replicaData.purpose}</p>
+                  </div>
+                </div>
               </div>
 
-              <div className="p-4 bg-muted/50 rounded-lg">
-                <h4 className="font-semibold mb-2">Expertise & Personality</h4>
-                <p>
-                  <strong>Expertise:</strong> {replicaData.expertise.join(", ")}
-                </p>
-                <p>
-                  <strong>Personality:</strong> {replicaData.personality}
-                </p>
-                <p>
-                  <strong>Response Style:</strong> {replicaData.responseStyle}
-                </p>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start space-x-3">
+                  <Brain className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <h5 className="font-medium text-blue-900">Ready to Create</h5>
+                    <p className="text-sm text-blue-700 mt-1">
+                      Your AI replica will be created and trained on the blockchain. This process may take a few minutes.
+                    </p>
+                  </div>
+                </div>
               </div>
-
-              <div className="p-4 bg-muted/50 rounded-lg">
-                <h4 className="font-semibold mb-2">Pricing & Availability</h4>
-                <p>
-                  <strong>Price:</strong> {replicaData.pricing} USD per session
-                </p>
-                <p>
-                  <strong>Availability:</strong> {replicaData.availability}
-                </p>
-              </div>
-
-              <div className="p-4 bg-muted/50 rounded-lg">
-                <h4 className="font-semibold mb-2">Training Content</h4>
-                <p>{replicaData.files.length} files uploaded</p>
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         )
 
       default:
@@ -372,106 +464,77 @@ export default function CreateReplicaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile-First Header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" onClick={() => router.push("/dashboard")}>
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
-              </Button>
-              <div className="flex items-center gap-2">
-                <Brain className="h-6 w-6 text-primary" />
-                <span className="font-semibold">Create AI Replica</span>
+            {/* Logo */}
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">S</span>
               </div>
+              <span className="text-xl font-bold text-gray-900">Create Replica</span>
             </div>
-            <div className="flex items-center gap-4">
-              <Wallet className="z-10">
-                <ConnectWallet>
-                  <Name className="text-inherit" />
-                </ConnectWallet>
+            
+            {/* Wallet Connection */}
+            <div className="flex items-center space-x-2">
+              {isConnected ? (
                 <WalletDropdown>
-                  <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
-                    <CoinbaseAvatar />
-                    <Name />
-                    <Address />
-                    <EthBalance />
-                  </Identity>
-                  <WalletDropdownDisconnect />
+                  <Wallet className="h-9 w-auto px-3 py-2 text-sm">
+                    <Avatar className="h-6 w-6" />
+                    <div className="hidden sm:flex items-center space-x-2">
+                      <Name className="text-sm font-medium" />
+                      <Badge variant="secondary" className="text-xs">
+                        <EthBalance className="text-xs" />
+                      </Badge>
+                    </div>
+                  </Wallet>
                 </WalletDropdown>
-                <WalletModal isOpen={showWalletModal} onClose={() => setShowWalletModal(false)} />
-              </Wallet>
+              ) : (
+                <ConnectWallet className="h-9 px-4 text-sm" />
+              )}
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold">Create Your AI Replica</h1>
-            <span className="text-sm text-muted-foreground">
-              Step {currentStep} of {steps.length}
-            </span>
-          </div>
-          <Progress value={(currentStep / steps.length) * 100} className="mb-4" />
-          <div className="flex justify-between text-xs text-muted-foreground">
-            {steps.map((step) => (
-              <div key={step.number} className={`text-center ${currentStep >= step.number ? "text-primary" : ""}`}>
-                <div className="font-medium">{step.title}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-6 max-w-4xl">
+        {renderStepIndicator()}
+        
+        {renderStepContent()}
 
-        {/* Step Content */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              {currentStep === 1 && <Brain className="h-5 w-5" />}
-              {currentStep === 2 && <Brain className="h-5 w-5" />}
-              {currentStep === 3 && <Brain className="h-5 w-5" />}
-              {currentStep === 4 && <Brain className="h-5 w-5" />}
-              {currentStep === 5 && <DollarSign className="h-5 w-5" />}
-              {currentStep === 6 && <Clock className="h-5 w-5" />}
-              {currentStep === 7 && <Upload className="h-5 w-5" />}
-              {currentStep === 8 && <CheckCircle className="h-5 w-5" />}
-              {steps[currentStep - 1].title}
-            </CardTitle>
-            <CardDescription>{steps[currentStep - 1].description}</CardDescription>
-          </CardHeader>
-          <CardContent>{renderStepContent()}</CardContent>
-        </Card>
-
-        {/* Navigation */}
-        <div className="flex justify-between">
-          <Button variant="outline" onClick={handlePrevious} disabled={currentStep === 1}>
+        {/* Navigation Buttons */}
+        <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8">
+          <Button
+            variant="outline"
+            onClick={prevStep}
+            disabled={currentStep === 1}
+            className="w-full sm:w-auto order-2 sm:order-1"
+          >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Previous
           </Button>
 
-          {currentStep < steps.length ? (
-            <Button
-              onClick={handleNext}
-              disabled={
-                (currentStep === 1 && !replicaData.name) ||
-                (currentStep === 2 && replicaData.expertise.length === 0) ||
-                (currentStep === 4 && !replicaData.ensRegistration)
-              }
-            >
-              Next
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          ) : (
-            <Button onClick={handleCreate} disabled={isCreating}>
-              {isCreating ? "Creating..." : "Create Replica"}
-            </Button>
-          )}
+          <div className="flex flex-col sm:flex-row gap-3 order-1 sm:order-2 w-full sm:w-auto">
+            {currentStep < totalSteps ? (
+              <Button onClick={nextStep} className="w-full sm:w-auto">
+                Next
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            ) : (
+              <Button 
+                onClick={handleCreate} 
+                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              >
+                <Brain className="h-4 w-4 mr-2" />
+                Create AI Replica
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }

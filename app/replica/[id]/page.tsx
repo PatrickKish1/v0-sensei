@@ -1,422 +1,451 @@
 "use client"
 
-import type React from "react"
-
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { useReplica, type Replica } from "@/lib/replica"
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { useParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  ArrowLeft,
+import { Progress } from "@/components/ui/progress"
+import { 
+  ArrowLeft, 
+  Brain, 
+  Users, 
+  MessageCircle, 
+  BookOpen, 
+  Coins, 
   Settings,
-  Upload,
-  BarChart3,
-  MessageCircle,
   Star,
+  Clock,
+  Calendar,
   TrendingUp,
-  Users,
-  FileText,
-  Video,
-  Music,
-  Trash2,
+  Edit,
   Play,
   Pause,
+  Trash2,
+  Plus,
+  Search,
+  Filter,
+  Wallet
 } from "lucide-react"
-import {
-  ConnectWallet,
-  Wallet,
-  WalletDropdown,
-  WalletDropdownDisconnect,
-  WalletModal,
-} from "@coinbase/onchainkit/wallet"
-import {
-  Name,
-  Identity,
-  Address,
-  Avatar as CoinbaseAvatar,
-  EthBalance,
-} from "@coinbase/onchainkit/identity"
+import { useAccount } from "wagmi"
+import { ConnectWallet, WalletDropdown } from "@coinbase/onchainkit/wallet"
+import { EthBalance, Name } from "@coinbase/onchainkit/identity"
+import { Badge } from "@/components/ui/badge"
+// import { Badge } from "@coinbase/onchainkit/identity"
 
-export default function ReplicaDetailPage({ params }: { params: { id: string } }) {
-  const { replicas, uploadContent, deleteContent } = useReplica()
-  const router = useRouter()
-  const [replica, setReplica] = useState<Replica | null>(null)
-  const [showWalletModal, setShowWalletModal] = useState(false)
 
-  // For demo purposes, we'll use a mock user since we're not using the auth system anymore
-  const user = {
-    name: "Demo User",
-    walletAddress: "0x742d35Cc6634C0532925a3b8D4C9db96590b5b8c"
+// Mock data for demo purposes
+const mockReplica = {
+  id: "1",
+  name: "Albert Einstein",
+  avatar: "/avatars/einstein.jpg",
+  bio: "Renowned physicist and Nobel laureate, specializing in theoretical physics, relativity, and quantum mechanics. Available to help students and researchers understand complex scientific concepts.",
+  expertise: ["Physics", "Relativity", "Quantum Mechanics", "Mathematics"],
+  status: "active",
+  rating: 4.9,
+  totalSessions: 127,
+  totalEarnings: 2500,
+  hourlyRate: 0.05,
+  availability: "24/7",
+  trainingProgress: 95,
+  content: [
+    {
+      id: "1",
+      title: "Special Theory of Relativity",
+      type: "document",
+      size: "2.4 MB",
+      uploadedAt: "2024-01-15"
+    },
+    {
+      id: "2", 
+      title: "Quantum Physics Lecture",
+      type: "video",
+      size: "45.2 MB",
+      uploadedAt: "2024-01-20"
+    }
+  ],
+  analytics: {
+    totalUsers: 89,
+    averageSessionLength: "45 min",
+    satisfactionRate: 96,
+    monthlyGrowth: 12
+  },
+  pricing: 0.05,
+  schedule: [
+    {
+      id: "1",
+      date: "2024-02-15",
+      time: "14:00",
+      duration: "60 min",
+      user: "John Doe",
+      status: "confirmed"
+    }
+  ]
+}
+
+export default function ReplicaDetailPage() {
+  const params = useParams()
+  const { isConnected } = useAccount()
+  const [activeTab, setActiveTab] = useState("overview")
+  const [isEditing, setIsEditing] = useState(false)
+
+  const replicaId = params.id as string
+
+  const handleEdit = () => {
+    setIsEditing(!isEditing)
   }
 
-  useEffect(() => {
-    const foundReplica = replicas.find((r) => r.id === params.id)
-    if (foundReplica) {
-      setReplica(foundReplica)
-    } else if (!foundReplica && replicas.length > 0) {
-      router.push("/dashboard")
-    }
-  }, [replicas, params.id, router])
-
-  if (!replica) {
-    return null
-  }
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
-    if (files.length > 0) {
-      await uploadContent(replica.id, files)
+  const handleDelete = () => {
+    if (confirm("Are you sure you want to delete this replica? This action cannot be undone.")) {
+      console.log("Deleting replica:", replicaId)
+      // In real app, this would call the smart contract
     }
   }
 
-  const getContentIcon = (type: string) => {
-    switch (type) {
-      case "video":
-        return <Video className="h-4 w-4" />
-      case "audio":
-        return <Music className="h-4 w-4" />
-      default:
-        return <FileText className="h-4 w-4" />
-    }
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-500"
-      case "training":
-        return "bg-yellow-500"
-      case "paused":
-        return "bg-gray-500"
-      case "error":
-        return "bg-red-500"
-      default:
-        return "bg-gray-500"
-    }
+  const handleToggleStatus = () => {
+    console.log("Toggling replica status")
+    // In real app, this would call the smart contract
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile-First Header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" onClick={() => router.push("/dashboard")}>
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Dashboard
+            {/* Back Button and Logo */}
+            <div className="flex items-center space-x-3">
+              <Button variant="ghost" size="sm" onClick={() => window.history.back()}>
+                <ArrowLeft className="h-4 w-4" />
               </Button>
-              <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={replica.avatar || "/placeholder.svg"} alt={replica.name} />
-                  <AvatarFallback>{replica.name[0]}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h1 className="font-semibold">{replica.name}</h1>
-                  <div className="flex items-center gap-2">
-                    <div className={`h-2 w-2 rounded-full ${getStatusColor(replica.status)}`}></div>
-                    <span className="text-sm text-muted-foreground capitalize">{replica.status}</span>
-                  </div>
-                </div>
+              <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">S</span>
               </div>
+              <span className="text-lg font-bold text-gray-900">Replica Details</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Wallet className="z-10">
-                <ConnectWallet>
-                  <Name className="text-inherit" />
-                </ConnectWallet>
+            
+            {/* Wallet Connection */}
+            <div className="flex items-center space-x-2">
+              {isConnected ? (
                 <WalletDropdown>
-                  <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
-                    <CoinbaseAvatar />
-                    <Name />
-                    <Address />
-                    <EthBalance />
-                  </Identity>
-                  <WalletDropdownDisconnect />
+                  <Wallet className="h-9 w-auto px-3 py-2 text-sm">
+                    <Avatar className="h-6 w-6" />
+                    <div className="hidden sm:flex items-center space-x-2">
+                      <Name className="text-sm font-medium" />
+                      <Badge variant="secondary" className="text-xs">
+                        <EthBalance className="text-xs" />
+                      </Badge>
+                    </div>
+                  </Wallet>
                 </WalletDropdown>
-                <WalletModal isOpen={showWalletModal} onClose={() => setShowWalletModal(false)} />
-              </Wallet>
-              <Button variant="outline" size="sm">
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
-              </Button>
-              {replica.status === "active" ? (
-                <Button variant="outline" size="sm">
-                  <Pause className="h-4 w-4 mr-2" />
-                  Pause
-                </Button>
               ) : (
-                <Button size="sm">
-                  <Play className="h-4 w-4 mr-2" />
-                  Activate
-                </Button>
+                <ConnectWallet className="h-9 px-4 text-sm" />
               )}
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="content">Content</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="overview" className="space-y-6">
-            {/* Status Cards */}
-            <div className="grid md:grid-cols-4 gap-6">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Training Progress</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold mb-2">{replica.trainingProgress}%</div>
-                  <Progress value={replica.trainingProgress} className="mb-2" />
-                  <p className="text-xs text-muted-foreground">{(replica.content?.length || 0)} files uploaded</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Total Sessions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{replica.analytics?.totalSessions || 0}</div>
-                  <p className="text-xs text-muted-foreground">+{replica.analytics?.monthlyGrowth || 0}% this month</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Revenue</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">${replica.analytics?.totalRevenue || 0}</div>
-                  <p className="text-xs text-muted-foreground">${replica.pricing} per session</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Rating</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-2">
-                    <div className="text-2xl font-bold">{replica.analytics?.averageRating || "-"}</div>
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-6 max-w-6xl">
+        {/* Replica Header */}
+        <div className="mb-8">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            {/* Replica Info */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <Avatar className="h-20 w-20 sm:h-24 sm:w-24">
+                <AvatarImage src={mockReplica.avatar} alt={mockReplica.name} />
+                <AvatarFallback className="text-2xl sm:text-3xl">{mockReplica.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{mockReplica.name}</h1>
+                  <Badge variant={mockReplica.status === "active" ? "default" : "secondary"}>
+                    {mockReplica.status}
+                  </Badge>
+                </div>
+                
+                <p className="text-gray-600 max-w-2xl">{mockReplica.bio}</p>
+                
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                  <div className="flex items-center gap-1">
+                    <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                    <span>{mockReplica.rating}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">{replica.analytics?.recentFeedback?.length || 0} reviews</p>
-                </CardContent>
-              </Card>
+                  <div className="flex items-center gap-1">
+                    <Users className="h-4 w-4" />
+                    <span>{mockReplica.totalSessions} sessions</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Coins className="h-4 w-4" />
+                    <span>{mockReplica.totalEarnings} ETH earned</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Recent Activity */}
-            <div className="grid lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MessageCircle className="h-5 w-5" />
-                    Recent Sessions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-8">
-                    <MessageCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-sm text-muted-foreground">
-                      No sessions yet. Your replica will appear here once activated.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5" />
-                    Performance
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Response Accuracy</span>
-                      <span className="font-semibold">-</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">User Satisfaction</span>
-                      <span className="font-semibold">-</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Knowledge Coverage</span>
-                      <span className="font-semibold">{replica.trainingProgress}%</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <Button onClick={handleEdit} variant="outline" className="w-full sm:w-auto">
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+              <Button 
+                onClick={handleToggleStatus} 
+                variant={mockReplica.status === "active" ? "outline" : "default"}
+                className="w-full sm:w-auto"
+              >
+                {mockReplica.status === "active" ? (
+                  <>
+                    <Pause className="h-4 w-4 mr-2" />
+                    Pause
+                  </>
+                ) : (
+                  <>
+                    <Play className="h-4 w-4 mr-2" />
+                    Activate
+                  </>
+                )}
+              </Button>
+              <Button onClick={handleDelete} variant="destructive" className="w-full sm:w-auto">
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </Button>
             </div>
-          </TabsContent>
+          </div>
+        </div>
 
-          <TabsContent value="content" className="space-y-6">
-            {/* Upload Section */}
+        {/* Mobile Tab Navigation */}
+        <div className="lg:hidden mb-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="content">Content</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        {/* Desktop Tab Navigation */}
+        <div className="hidden lg:block mb-8">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList>
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="content">Content & Training</TabsTrigger>
+              <TabsTrigger value="schedule">Schedule</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="settings">Settings</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        {/* Tab Content */}
+        <TabsContent value="overview" className="space-y-6">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Training Progress</CardTitle>
+                <Brain className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{mockReplica.trainingProgress}%</div>
+                <Progress value={mockReplica.trainingProgress} className="mt-2" />
+                <p className="text-xs text-muted-foreground mt-1">AI training completion</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Sessions</CardTitle>
+                <MessageCircle className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{mockReplica.totalSessions}</div>
+                <p className="text-xs text-muted-foreground">Completed interactions</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Earnings</CardTitle>
+                <Coins className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{mockReplica.totalEarnings} ETH</div>
+                <p className="text-xs text-muted-foreground">Lifetime revenue</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Hourly Rate</CardTitle>
+                <Clock className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{mockReplica.hourlyRate} ETH</div>
+                <p className="text-xs text-muted-foreground">Per session hour</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Expertise & Details */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Upload className="h-5 w-5" />
-                  Upload Training Content
+                  <Brain className="h-5 w-5" />
+                  Expertise Areas
                 </CardTitle>
-                <CardDescription>
-                  Add documents, videos, or audio files to improve your replica's knowledge
-                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
-                  <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground mb-4">Drag and drop files here, or click to browse</p>
-                  <input
-                    type="file"
-                    multiple
-                    accept=".pdf,.doc,.docx,.txt,.mp4,.mp3,.wav"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="content-upload"
-                  />
-                  <Button asChild variant="outline">
-                    <label htmlFor="content-upload" className="cursor-pointer">
-                      Choose Files
-                    </label>
-                  </Button>
+                <div className="flex flex-wrap gap-2">
+                  {mockReplica.expertise.map((skill) => (
+                    <Badge key={skill} variant="secondary">
+                      {skill}
+                    </Badge>
+                  ))}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Content List */}
             <Card>
               <CardHeader>
-                <CardTitle>Training Content ({(replica.content?.length || 0)})</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  Availability & Pricing
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                {(replica.content?.length || 0) === 0 ? (
-                  <div className="text-center py-8">
-                    <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-sm text-muted-foreground">
-                      No content uploaded yet. Add some files to start training your replica.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {(replica.content || []).map((content) => (
-                      <div key={content.id} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center gap-3">
-                          {getContentIcon(content.type)}
-                          <div>
-                            <p className="font-medium">{content.name}</p>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <span>{(content.size / 1024 / 1024).toFixed(2)} MB</span>
-                              <span>•</span>
-                              <Badge
-                                variant={content.status === "completed" ? "default" : "secondary"}
-                                className="text-xs"
-                              >
-                                {content.status}
-                              </Badge>
-                            </div>
-                          </div>
-                        </div>
-                        <Button variant="ghost" size="sm" onClick={() => deleteContent(replica.id, content.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              <CardContent className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Status:</span>
+                  <Badge variant={mockReplica.status === "active" ? "default" : "secondary"}>
+                    {mockReplica.status}
+                  </Badge>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Availability:</span>
+                  <span className="text-sm font-medium">{mockReplica.availability}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Hourly Rate:</span>
+                  <span className="text-sm font-medium">{mockReplica.pricing} ETH</span>
+                </div>
               </CardContent>
             </Card>
-          </TabsContent>
+          </div>
+        </TabsContent>
 
-          <TabsContent value="analytics" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BarChart3 className="h-5 w-5" />
-                    Session Analytics
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-8">
-                    <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-sm text-muted-foreground">
-                      Analytics will appear here once your replica starts receiving sessions.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Users className="h-5 w-5" />
-                    User Feedback
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-8">
-                    <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-sm text-muted-foreground">User feedback and ratings will be displayed here.</p>
-                  </div>
-                </CardContent>
-              </Card>
+        <TabsContent value="content" className="space-y-6">
+          {/* Content Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Content & Training</h2>
+              <p className="text-gray-600">Manage your replica's training materials and knowledge base</p>
             </div>
-          </TabsContent>
+            <Button className="w-full sm:w-auto">
+              <Plus className="h-4 w-4 mr-2" />
+              Upload Content
+            </Button>
+          </div>
 
-          <TabsContent value="settings" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Replica Settings</CardTitle>
-                <CardDescription>Configure your replica's behavior and availability</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Price per Session</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="number"
-                          value={replica.pricing}
-                          className="flex-1 px-3 py-2 border rounded-md"
-                          readOnly
-                        />
-                        <div className="px-3 py-2 border rounded-md bg-muted text-sm">USD</div>
+          {/* Training Progress */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Training Progress</CardTitle>
+              <CardDescription>AI model training status and completion</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium">Overall Progress</span>
+                <span className="text-sm text-gray-600">{mockReplica.trainingProgress}%</span>
+              </div>
+              <Progress value={mockReplica.trainingProgress} className="h-3" />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                <div className="text-center">
+                  <div className="font-medium text-green-600">✓ Documents</div>
+                  <div className="text-gray-500">Processed</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-medium text-blue-600">🔄 Training</div>
+                  <div className="text-gray-500">In Progress</div>
+                </div>
+                <div className="text-center">
+                  <div className="font-medium text-gray-400">⏳ Validation</div>
+                  <div className="text-gray-500">Pending</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Content Library */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Content Library</CardTitle>
+              <CardDescription>Uploaded training materials and documents</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {mockReplica.content.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <BookOpen className="h-5 w-5 text-blue-600" />
+                      <div>
+                        <p className="text-sm font-medium">{item.title}</p>
+                        <p className="text-xs text-gray-500">
+                          {item.type} • {item.size} • {item.uploadedAt}
+                        </p>
                       </div>
                     </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Availability</label>
-                      <div className="px-3 py-2 border rounded-md bg-muted text-sm">
-                        {replica.availability}
-                      </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm">View</Button>
+                      <Button variant="outline" size="sm">Edit</Button>
                     </div>
                   </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-                  <Button variant="outline">
-                    <Settings className="h-4 w-4 mr-2" />
-                    Edit Settings
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+        <TabsContent value="schedule" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Schedule Management</CardTitle>
+              <CardDescription>Manage your replica's availability and bookings</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-center text-gray-500 py-8">Schedule management coming soon...</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="analytics" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Analytics Dashboard</CardTitle>
+              <CardDescription>Performance metrics and insights</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-center text-gray-500 py-8">Analytics dashboard coming soon...</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="settings" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Replica Settings</CardTitle>
+              <CardDescription>Configure your replica's behavior and preferences</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-center text-gray-500 py-8">Settings panel coming soon...</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </main>
     </div>
   )
 }
